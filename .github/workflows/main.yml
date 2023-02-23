@@ -18,7 +18,11 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.READ_ROLE }}
           role-session-name: OIDCSession
-      - name: Print assumed role
-        run: aws sts get-caller-identity
-      - name: s3 list 
-        run: aws s3 ls gb-cloud-resume
+      - name: Sync Bucket
+      - uses: actions/checkout@v3
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: open-up-the-cloud-website
+          SOURCE_DIR: html
