@@ -20,10 +20,6 @@ jobs:
           role-session-name: OIDCSession
       - name: Download repo
         uses: actions/checkout@v3
-      - name: Sync Bucket
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
-        env:
-          AWS_S3_BUCKET: open-up-the-cloud-website
-          SOURCE_DIR: html
+      - name: Copy files to the production website with the AWS CLI
+        run: |
+          aws s3 sync ./html s3://gb-cloud-resume
