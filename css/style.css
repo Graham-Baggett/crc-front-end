@@ -1,8 +1,84 @@
-li {
+li
+{
     margin-bottom: 10px;
 }
 
-th {
+th
+{
     padding-right: 8px;
 }
-  
+
+body
+{
+    font-size: 20px;
+}
+
+.bg-burnt-orange
+{
+    background-color: rgb(255, 60, 0);
+}
+
+.color-burnt-orange
+{
+    color: rgb(255, 60, 0);
+}
+
+.color-white
+{
+    color: white;
+}
+
+.font-family-garamond
+{
+    font-family: Garamond;
+}
+
+.font-style-italic
+{
+    font-style: italic;
+}
+
+.font-size-18
+{
+    font-size: 18px;
+}
+
+.font-weight-normal
+{
+    font-weight: normal;
+}
+
+.bg-light-grayish-red
+{
+    background-color: rgb(248, 241, 241);
+}
+
+.font-family-montserrat-sans-serif
+{
+    font-family: Montserrat, sans-serif;
+}
+
+.mb-2em
+{
+    margin-bottom: .2rem;
+}
+
+.mb-9
+{
+    margin-bottom: 9%;
+}
+
+.ml-9
+{
+    margin-left: 9%;
+}
+
+.opacity-3
+{
+    opacity: 0.3
+}
+
+.opacity-4
+{
+    opacity: 0.4
+}

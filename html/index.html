@@ -6,14 +6,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <script>
-        fetch('https://thmc67kpn2.execute-api.us-east-1.amazonaws.com/prod/put')
-            .then(() => fetch('https://thmc67kpn2.execute-api.us-east-1.amazonaws.com/prod/get'))
-            .then(response => response.json())
-            .then((data) => {
-                document.getElementById('visitorcount').innerText = data
-            })
-    </script>
+    <script src="visitorcount.js"></script>
 </head>
 
 <body>
