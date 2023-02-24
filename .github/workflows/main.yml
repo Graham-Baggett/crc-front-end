@@ -16,7 +16,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@master
         with:
           aws-region: us-east-1
-          role-to-assume: ${{ secrets.READ_ROLE }}
+          role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
       - name: Download repo
         uses: actions/checkout@v3
