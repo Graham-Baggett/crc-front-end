@@ -22,4 +22,4 @@ jobs:
         uses: actions/checkout@v3
       - name: Copy files to the production website with the AWS CLI
         run: |
-          aws s3 sync ./html s3://gb-cloud-resume
+          aws s3 sync . s3://gb-cloud-resume --exclude='*' --include='*.html' --include='*.css'
