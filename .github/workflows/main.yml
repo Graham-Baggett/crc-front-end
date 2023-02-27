@@ -20,6 +20,7 @@ jobs:
           role-session-name: OIDCSession
 
   push-to-s3:
+    needs: connect-to-aws
     runs-on: ubuntu-latest
 #     environment:
 #       name: production
