@@ -26,8 +26,8 @@ jobs:
         run: sam build
 #       - name: Deploy SAM template to AWS
 #         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
-      - name: Print assumed role
-        run: aws sts get-caller-identity
+      - name: Print s3 contents
+        run: aws s3 ls s3://aws-sam-cli-managed-default-samclisourcebucket-17paw5tr04obg
       - name: Copy files to the production website with the AWS CLI
         run: |
           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
