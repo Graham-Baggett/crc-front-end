@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 
 on: [push]
 
 jobs:
-  update-aws:
+  update-infra-and-sync-site: #updates AWS infrastructure and syncs S3 bucket changes
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -20,8 +20,9 @@ jobs:
           role-session-name: OIDCSession
       - name: Download repo
         uses: actions/checkout@v3
+      - name: Setup SAM
+        uses: aws-actions/setup-sam@v1
       - name: Copy files to the production website with the AWS CLI
         run: |
           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
-      - name: Setup SAM
-        uses: aws-actions/setup-sam@v1
+      
