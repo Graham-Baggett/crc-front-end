@@ -1,10 +1,30 @@
-name: Update S3 bucket
-run-name: ${{ github.actor }} is updating the S3 bucket in GitHub Actions 🚀
+name: Update AWS Environment
+run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 🚀
 
 on: [push]
 
 jobs:
-  push-to-s3:
+#   push-to-s3:
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: production
+#     permissions:
+#       id-token: write # This is required for requesting the JWT
+#       contents: read  # This is required for actions/checkout
+#     steps: 
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@master
+#         with:
+#           aws-region: us-east-1
+#           role-to-assume: ${{ secrets.WRITE_ROLE }}
+#           role-session-name: OIDCSession
+#       - name: Download repo
+#         uses: actions/checkout@v3
+#       - name: Copy files to the production website with the AWS CLI
+#         run: |
+#           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
+        
+  deploy-infra:
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -18,10 +38,5 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
-      - name: Download repo
-        uses: actions/checkout@v3
       - name: Setup SAM
         uses: aws-actions/setup-sam@v1
-#       - name: Copy files to the production website with the AWS CLI
-#         run: |
-#           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
