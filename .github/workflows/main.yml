@@ -24,8 +24,10 @@ jobs:
         uses: aws-actions/setup-sam@v1
       - name: Build SAM template for deployment 
         run: sam build
-      - name: Deploy SAM template to AWS
-        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+#       - name: Deploy SAM template to AWS
+#         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+      - name: Print assumed role
+        run: aws sts get-caller-identity
       - name: Copy files to the production website with the AWS CLI
         run: |
           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
