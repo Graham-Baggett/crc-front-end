@@ -74,7 +74,7 @@ Resources:
           ContentSecurityPolicy:
             ContentSecurityPolicy: default-src 'none'; font-src 'self' https://fonts.googleapis.com 
                                    https://cdn.jsdelivr.net https://fonts.gstatic.com; 
-                                   connect-src 'self' https://thmc67kpn2.execute-api.us-east-1.amazonaws.com; 
+                                   connect-src 'self' https://ufh573r6ol.execute-api.us-east-1.amazonaws.com; 
                                    img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none';
                                    style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com 
                                    https://grahambaggett.com; frame-ancestors 'none'; 
