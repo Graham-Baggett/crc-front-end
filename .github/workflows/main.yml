@@ -13,22 +13,34 @@ jobs:
       contents: read  # This is required for actions/checkout
     steps: 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
       - name: Download repo
         uses: actions/checkout@v3
-      - name: Setup SAM
-        uses: aws-actions/setup-sam@v1
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+      - name: Install SAM CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          curl -sL https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip -o sam.zip
+          unzip sam.zip -d sam-installation
+          sudo ./sam-installation/install
       - name: Build SAM template for deployment 
         run: sam build
       - name: Deploy SAM template to AWS
         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
       - name: Print s3 contents
-        run: aws s3 ls s3://aws-sam-cli-managed-default-samclisourcebucket-17paw5tr04obg
+        run: aws s3 ls s3://aws-sam-cli-managed-default-samclisourcebucket-17paw5tr04obg || echo "S3 bucket not found"
       - name: Copy files to the production website with the AWS CLI
-        run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
+        uses: aws-actions/aws-cli@v1
+        with:
+          args: s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
+      - name: Check deployment status
+        run: aws cloudformation describe-stacks --stack-name <stack-name> || exit 1
       
