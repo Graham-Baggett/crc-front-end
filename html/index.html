@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cloud Resume Challenge Home Page</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -11,13 +13,17 @@
 </head>
 
 <body>
-    <h1>Welcome to my website</h1>
-    <p>Now hosted on Amazon S3!</p>
-    <p>Check out my resume <a href="https://grahambaggett.com/html/resume.html">here</a>
-    </p>
-    <p> Visitors:
-        <span id="visitorcount" />
-    </p>
+    <header>
+        <h1>Welcome to my website</h1>
+        <p>Now hosted on Amazon S3!</p>
+    </header>
+    <main>
+        <p>Check out my resume <a href="html/resume.html">here</a></p>
+        <p> Visitors: <span id="visitorcount" aria-live="polite"></span></p>
+    </main>
+    <footer>
+        <p>Copyright © 2023 - My Cloud Resume Challenge</p>
+    </footer>
 </body>
 
 </html>
