@@ -28,57 +28,57 @@ body
     color: white;
 }
 
-.font-family-garamond
+.font-garamond
 {
     font-family: Garamond;
 }
 
-.font-style-italic
+.font-italic
 {
     font-style: italic;
 }
 
-.font-size-18
+.font-18
 {
     font-size: 18px;
 }
 
-.font-weight-normal
+.font-normal
 {
     font-weight: normal;
 }
 
-.bg-light-grayish-red
+.bg-light-gray
 {
     background-color: rgb(248, 241, 241);
 }
 
-.font-family-montserrat-sans-serif
+.font-montserrat
 {
     font-family: Montserrat, sans-serif;
 }
 
-.mb-2em
+.margin-bottom-small
 {
     margin-bottom: .2rem;
 }
 
-.mb-9
+.margin-bottom-large
 {
     margin-bottom: 9%;
 }
 
-.ml-9
+.margin-left-large
 {
     margin-left: 9%;
 }
 
-.opacity-3
+.opacity-30
 {
     opacity: 0.3
 }
 
-.opacity-4
+.opacity-40
 {
     opacity: 0.4
 }
