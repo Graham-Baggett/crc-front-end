@@ -65,8 +65,8 @@ Resources:
         Origins:
           - DomainName: gb-cloud-resume.s3.amazonaws.com
             Id: gb-cloud-resume.s3.amazonaws.com
-            CustomOriginConfig:
-              OriginProtocolPolicy: https-only
+            # CustomOriginConfig:
+            #   OriginProtocolPolicy: https-only
         Enabled: true
         DefaultRootObject: index.html
 
