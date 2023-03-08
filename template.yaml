@@ -21,6 +21,12 @@ Resources:
       Tags:
       - Key: "Name"
         Value: "CloudResumeChallengeWebsiteBucket"
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
 
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
