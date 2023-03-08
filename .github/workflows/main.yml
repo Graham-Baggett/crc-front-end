@@ -24,11 +24,9 @@ jobs:
         run: sam build
       - name: Deploy SAM template to AWS
         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
-      - name: Print s3 contents
-        run: aws s3 ls s3://aws-sam-cli-managed-default-samclisourcebucket-17paw5tr04obg || echo "S3 bucket not found"
       - name: Copy files to the production website with the AWS CLI
         run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js'
+          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
       - name: Check deployment status
         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
       
