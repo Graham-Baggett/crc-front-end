@@ -53,7 +53,7 @@ Resources:
           - grahambaggett.com
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
-          TargetOriginId: gb-cloud-resume.s3-us-east-1.amazonaws.com
+          TargetOriginId: gb-cloud-resume.s3.amazonaws.com
           DefaultTTL: 0
           MinTTL: 0
           MaxTTL: 0
@@ -61,8 +61,8 @@ Resources:
             QueryString: false
           ResponseHeadersPolicyId: !Ref ResponseHeadersPolicy
         Origins:
-          - DomainName: gb-cloud-resume.s3-us-east-1.amazonaws.com
-            Id: gb-cloud-resume.s3-us-east-1.amazonaws.com
+          - DomainName: gb-cloud-resume.s3.amazonaws.com
+            Id: gb-cloud-resume.s3.amazonaws.com
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
         Enabled: true
