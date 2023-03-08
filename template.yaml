@@ -140,7 +140,7 @@ Outputs:
     Value: !Sub '${AWS::StackName}'
   BucketName:
     Description: 'Name of the bucket'
-    Value: !Ref Bucket
+    Value: !Ref MyWebsiteBucket
     Export:
       Name: !Sub '${AWS::StackName}-BucketName'
   BucketDomainName:
