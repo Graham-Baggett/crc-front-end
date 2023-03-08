@@ -68,7 +68,7 @@ Resources:
             QueryString: false
           ResponseHeadersPolicyId: !Ref ResponseHeadersPolicy
         Origins:
-          - DomainName: !GetAtt MyWebsiteBucket.DomainName
+          - DomainName: !GetAtt MyWebsiteBucket.RegionalDomainName
             Id: S3Origin
             S3OriginConfig:
               OriginAccessIdentity: ''
