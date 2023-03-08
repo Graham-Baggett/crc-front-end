@@ -32,7 +32,6 @@ Resources:
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
     Properties:
-      HostedZoneId: Z04217431MI7BB7WYPK3F
       RecordSets:
         - Name: grahambaggett.com
           Type: A
