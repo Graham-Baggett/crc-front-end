@@ -53,7 +53,7 @@ Resources:
           - grahambaggett.com
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
-          TargetOriginId: gb-cloud-resume.s3-website-us-east-1.amazonaws.com
+          TargetOriginId: gb-cloud-resume.s3-us-east-1.amazonaws.com
           DefaultTTL: 0
           MinTTL: 0
           MaxTTL: 0
@@ -61,13 +61,10 @@ Resources:
             QueryString: false
           ResponseHeadersPolicyId: !Ref ResponseHeadersPolicy
         Origins:
-          - DomainName: gb-cloud-resume.s3-website-us-east-1.amazonaws.com
-            Id: gb-cloud-resume.s3-website-us-east-1.amazonaws.com
+          - DomainName: gb-cloud-resume.s3-us-east-1.amazonaws.com
+            Id: gb-cloud-resume.s3-us-east-1.amazonaws.com
             CustomOriginConfig:
-              OriginProtocolPolicy: http-only
-            OriginCustomHeaders:
-              - HeaderName: "Referer"
-                HeaderValue: "TeStVaLuE"
+              OriginProtocolPolicy: https-only
         Enabled: true
         DefaultRootObject: index.html
 
@@ -120,10 +117,6 @@ Resources:
               - - "arn:aws:s3:::"
                 - !Ref MyWebsiteBucket
                 - /*
-            Condition:
-              StringLike:
-                'aws:Referer':
-                - 'TeStVaLuE'
       Bucket: !Ref MyWebsiteBucket
 
 # Outputs:
