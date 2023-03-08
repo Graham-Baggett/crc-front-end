@@ -15,14 +15,19 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
-      WebsiteConfiguration:
-        IndexDocument: index.html
       BucketName: gb-cloud-resume
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
       Tags:
       - Key: "Name"
         Value: "CloudResumeChallengeWebsiteBucket"
       VersioningConfiguration:
         Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
 
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
