@@ -14,7 +14,7 @@ Resources:
   MyWebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: PublicRead
+      AccessControl: Private
       WebsiteConfiguration:
         IndexDocument: index.html
       BucketName: gb-cloud-resume
