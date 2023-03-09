@@ -1,14 +1,14 @@
 (async function () {
   try {
     const putResponse = await fetch(
-      "https://ufh573r6ol.execute-api.us-east-1.amazonaws.com/Prod/put"
+      "https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com/Prod/put"
     );
     if (!putResponse.ok) {
       throw new Error("Failed to update visitor count");
     }
 
     const getResponse = await fetch(
-      "https://ufh573r6ol.execute-api.us-east-1.amazonaws.com/Prod/get"
+      "https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com/Prod/get"
     );
     if (!getResponse.ok) {
       throw new Error("Failed to get visitor count");
