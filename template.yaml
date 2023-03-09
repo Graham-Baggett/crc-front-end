@@ -37,7 +37,7 @@ Resources:
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
     Properties:
-      HostedZoneName: !Ref DomainName
+      HostedZoneName: !Sub '${DomainName}.'
       RecordSets:
         - Name: !Ref DomainName
           Type: A
