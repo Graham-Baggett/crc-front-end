@@ -1,0 +1,15 @@
+{
+  "terminal.integrated.defaultProfile.windows": "PowerShell",  
+  "terminal.integrated.profiles.windows": {
+    "PowerShell":{
+      "source": "PowerShell",
+      "args": [
+        "-ExecutionPolicy",
+        "ByPass",
+        "-NoExit",
+        "-Command",
+        "& conda activate sam"
+        ]
+    }
+  },
+}
