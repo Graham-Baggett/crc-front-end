@@ -32,7 +32,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
-        IndexDocument: index.html
+        IndexDocument: html/index.html
 
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
