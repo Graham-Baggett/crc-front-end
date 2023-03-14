@@ -21,9 +21,9 @@ jobs:
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
       - name: Terraform init, plan and apply
-        working-directory: ${{ env.working-directory }}
         run: |
           echo `pwd`
+          cd terraform
           terraform init
       
       
