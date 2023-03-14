@@ -18,15 +18,11 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
-      - name: Download repo
-        uses: actions/checkout@v3
-      - name: Build SAM template for deployment 
-        run: sam build
-      - name: Deploy SAM template to AWS
-        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
-      - name: Copy files to the production website with the AWS CLI
+      - name: Terraform init, plan and apply
         run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
-      - name: Check deployment status
-        run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
+          echo `pwd`
+          echo "tfpath ${{ github.event.inputs.tfpath }}"
+          echo "** Running Terraform Init**"
+          terraform init
+      
       
