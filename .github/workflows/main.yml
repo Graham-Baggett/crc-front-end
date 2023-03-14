@@ -20,6 +20,8 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
+      - name: Download repo
+        uses: actions/checkout@v3
       - name: Terraform init, plan and apply
         run: |
           echo `pwd`
