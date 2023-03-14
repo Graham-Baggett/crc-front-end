@@ -32,7 +32,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
-        IndexDocument: html/index.html
+        IndexDocument: index.html
 
   MyRoute53Record:
     Type: "AWS::Route53::RecordSetGroup"
@@ -80,7 +80,7 @@ Resources:
               OriginAccessIdentity: ''
             OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
         Enabled: true
-        DefaultRootObject: index.html
+        DefaultRootObject: html/index.html
 
   CloudFrontOriginAccessControl:
     Type: AWS::CloudFront::OriginAccessControl
