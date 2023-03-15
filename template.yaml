@@ -112,7 +112,7 @@ Resources:
             FrameOption: DENY
             Override: false
           ReferrerPolicy:
-            ReferrerPolicy: no-referrer-when-downgrade
+            ReferrerPolicy: no-referrer
             Override: false
           StrictTransportSecurity:
             AccessControlMaxAgeSec: 63072000
