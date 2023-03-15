@@ -125,20 +125,20 @@ Resources:
             Protection: true
             Override: false
 
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref MyWebsiteBucket
-      PolicyDocument:
-        Statement:
-        - Action: s3:GetObject
-          Effect: Allow
-          Resource: !Sub ${MyWebsiteBucket.Arn}/*
-          Principal:
-            Service: cloudfront.amazonaws.com
-          Condition:
-            StringEquals:
-              AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${MyCloudFrontDistribution}
+#   BucketPolicy:
+#     Type: AWS::S3::BucketPolicy
+#     Properties:
+#       Bucket: !Ref MyWebsiteBucket
+#       PolicyDocument:
+#         Statement:
+#         - Action: s3:GetObject
+#           Effect: Allow
+#           Resource: !Sub ${MyWebsiteBucket.Arn}/*
+#           Principal:
+#             Service: cloudfront.amazonaws.com
+#           Condition:
+#             StringEquals:
+#               AWS:SourceArn: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${MyCloudFrontDistribution}
 
 Outputs:
   StackName:
