@@ -1,7 +1,10 @@
 name: Update AWS Environment
 run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 🚀
 
-on: [push]
+on: 
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
