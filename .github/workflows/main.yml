@@ -42,6 +42,11 @@ jobs:
       
   dast-scan: #performs Dynamic Application Security Testing against the target site
     runs-on: ubuntu-latest
+    environment:
+      name: production
+    permissions:
+      id-token: write # This is required for requesting the JWT
+    # needs: update-infra-and-sync-site
     steps:
       - name: ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.7.0
