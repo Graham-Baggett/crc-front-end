@@ -47,8 +47,10 @@ jobs:
     permissions:
       id-token: write # This is required for requesting the JWT
     # needs: update-infra-and-sync-site
+    container:
+      image: owasp/zap2docker-stable
+      options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
     steps:
-      - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.7.0
-        with:
-          target: 'https://grahambaggett.com'
+      - run: pwd && ls -l
+      - name: run zap baseline scan
+        run: zap-baseline.py -t https://grahambaggett.com -x report_xml.xml || echo 0
