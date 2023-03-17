@@ -42,14 +42,14 @@ jobs:
       
   dast-scan: #performs Dynamic Application Security Testing against the target site
     runs-on: ubuntu-latest
-#     needs: update-infra-and-sync-site
+    needs: update-infra-and-sync-site
     container:
       image: owasp/zap2docker-stable
       options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
     steps:
       - name: Run ZAP baseline scan
         run: |
-          zap-baseline.py -t https://grahambaggett.com -J report_json.json -w report_md.md -r report_html.html -a || echo 0
+          zap-baseline.py -t https://grahambaggett.com -r report_html.html -a
       - name: Upload ZAP report
         uses: actions/upload-artifact@v3
         with:
