@@ -40,3 +40,10 @@ jobs:
       - name: Check deployment status
         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
       
+  dast-scan: #performs Dynamic Application Security Testing against the target site
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+          target: 'https://grahambaggett.com'
