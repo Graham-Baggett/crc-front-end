@@ -42,27 +42,12 @@ jobs:
       
   dast-scan: #performs Dynamic Application Security Testing against the target site
     runs-on: ubuntu-latest
-    name: Scan the webapplication
-    steps:
-      - name: Checkout
-        uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.7.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          docker_name: 'owasp/zap2docker-stable'
-          target: 'https://grahambaggett.com'
-          rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
-#     environment:
-#       name: production
-#     permissions:
-#       id-token: write # This is required for requesting the JWT
 #     needs: update-infra-and-sync-site
-#     container:
-#       image: owasp/zap2docker-stable
-#       options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
-#     steps:
-#       - run: pwd && ls -l
-#       - name: run zap baseline scan
-#         run: zap-baseline.py -t https://grahambaggett.com -x report_xml.xml || echo 0
+    container:
+      image: owasp/zap2docker-stable
+      options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
+    steps:
+      - name: Run ZAP baseline scan
+        run: |
+          zap-baseline.py -t https://grahambaggett.com -J report_json.json -w report_md.md -r report_html.html -a || echo 0
+          ls -la
