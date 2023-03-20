@@ -37,8 +37,8 @@ resource "aws_s3_bucket_versioning" "my_website_versioning_setting" {
 resource "aws_s3_bucket_website_configuration" "my_website_configuration" {
   bucket = local.bucket_name
   
-  website {
-    index_document = "index.html"
+  index_document {
+    suffix = "index.html"
   }
 }
 
