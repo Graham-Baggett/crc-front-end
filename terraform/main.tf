@@ -45,7 +45,7 @@ resource "aws_s3_bucket_website_configuration" "my_website_configuration" {
 # Define a public access block configuration
 resource "aws_s3_bucket_public_access_block" "public_access_block_configuration" {
   bucket = local.bucket_name
-  
+
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
