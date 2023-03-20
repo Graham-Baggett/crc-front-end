@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-#     env:
-#       working-directory: ./terraform
+    env:
+      working-directory: ./terraform
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read  # This is required for actions/checkout
@@ -23,12 +23,12 @@ jobs:
       - name: Download repo
         uses: actions/checkout@v3
       - name: Terraform init, plan and apply
+        working-directory: ${{ env.working_directory }}
         run: |
           echo `pwd`
-          cd terraform
           terraform init
           terraform fmt -check
           terraform plan
-          terraform apply
+          terraform apply -auto-approve
       
       
