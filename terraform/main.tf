@@ -12,18 +12,33 @@ locals {
 # Create an S3 bucket
 resource "aws_s3_bucket" "my_website_bucket" {
   bucket = local.bucket_name
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
-
-  website {
-    index_document = "index.html"
-  }
-
+  
   tags = {
     Name = "CloudResumeChallengeWebsiteBucket"
+  }
+}
+
+#Define the S3 Access Control List setting
+resource "aws_s3_bucket_acl" "example" {
+  bucket = local.bucket_name
+  acl    = "private"
+}
+
+#Define an S3 Versioning setting
+resource "aws_s3_bucket_versioning" "my_website_versioning_setting" {
+  bucket = local.bucket_name
+  
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+#Define an S3 Website configuration
+resource "aws_s3_bucket_website_configuration" "my_website_configuration" {
+  bucket = local.bucket_name
+  
+  website {
+    index_document = "index.html"
   }
 }
 
