@@ -37,6 +37,8 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
+    
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers_policy.id
   }
 
   # For this lab, we only deploy to minimal regions.
@@ -54,6 +56,43 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     minimum_protocol_version = "TLSv1.2_2021"
 
   }
+  
+  resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
+  name = "my-security-headers-policy"
+  security_headers_config {
+    content_type_options {
+      override = true
+    }
+    frame_options {
+      frame_option = "DENY"
+      override = true
+    }
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override = true
+    }
+    xss_protection {
+      mode_block = true
+      protection = true
+      override = true
+    }
+    strict_transport_security {
+      access_control_max_age_sec = "63072000"
+      include_subdomains = true
+      preload = true
+      override = true
+    }
+    content_security_policy {
+      content_security_policy = "default-src 'none'; font-src 'self' https://fonts.googleapis.com 
+                                   https://cdn.jsdelivr.net https://fonts.gstatic.com; 
+                                   connect-src 'self' https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com; 
+                                   img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none';
+                                   style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; 
+                                   frame-ancestors 'none'; manifest-src 'self'"
+      override = true
+    }
+  }
+}
 
   tags = {
     Name = "CloudResumeChallengeCloudFront"
