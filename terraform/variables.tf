@@ -3,3 +3,9 @@ variable "domain_name" {
   default = "grahambaggett.com"
   description = "Custom domain name"
 }
+
+variable "bucket_name" {
+  type = string
+  default = "gb-cloud-resume"
+  description = "Custom domain name"
+}
