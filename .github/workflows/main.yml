@@ -28,7 +28,7 @@ jobs:
           cd terraform
           terraform init
           terraform validate
-          terraform fmt -diff
+          terraform fmt -check
           terraform plan
       
       
