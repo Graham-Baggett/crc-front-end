@@ -8,7 +8,7 @@ locals {
   bucket_name = "gb-cloud-resume"
 }
 
-# Create an S3 bucket with public access block configuration
+# Create an S3 bucket
 resource "aws_s3_bucket" "my_website_bucket" {
   bucket = local.bucket_name
   acl    = "private"
@@ -24,13 +24,16 @@ resource "aws_s3_bucket" "my_website_bucket" {
   tags = {
     Name = "CloudResumeChallengeWebsiteBucket"
   }
+}
 
-  public_access_block_configuration {
-    block_public_acls       = true
-    block_public_policy     = true
-    ignore_public_acls      = true
-    restrict_public_buckets = true
-  }
+# Define a public access block configuration
+resource "aws_s3_account_public_access_block" "public_access_block_configuration" {
+  bucket = local.bucket_name
+  
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 # Create an ACM certificate
