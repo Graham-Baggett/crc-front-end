@@ -3,9 +3,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Define bucket name
+# Define variables
 locals {
   bucket_name = "gb-cloud-resume"
+  domain_name = "grahambaggett.com"
 }
 
 # Create an S3 bucket
@@ -38,7 +39,7 @@ resource "aws_s3_account_public_access_block" "public_access_block_configuration
 
 # Create an ACM certificate
 resource "aws_acm_certificate" "my_certificate" {
-  domain_name       = var.domain_name
+  domain_name       = local.domain_name
   validation_method = "DNS"
 
   tags = {
