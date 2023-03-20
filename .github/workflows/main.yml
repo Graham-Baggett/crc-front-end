@@ -27,8 +27,8 @@ jobs:
           echo `pwd`
           cd terraform
           terraform init
-          terraform validate
           terraform fmt -check
           terraform plan
+          terraform apply
       
       
