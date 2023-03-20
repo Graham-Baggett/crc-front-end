@@ -26,12 +26,9 @@ jobs:
         run: |
           echo `pwd`
           cd terraform
-          echo `terraform init`
           terraform init
-          echo `terraform validate`
           terraform validate
-#          terraform fmt --diff
-#          terraform fmt -check
-#          terraform plan
+          terraform fmt -check
+          terraform plan
       
       
