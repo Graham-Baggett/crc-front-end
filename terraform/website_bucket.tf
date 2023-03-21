@@ -24,7 +24,7 @@ resource "aws_s3_bucket_versioning" "my_website_versioning_setting" {
 
 #Define an S3 Website configuration
 resource "aws_s3_bucket_website_configuration" "my_website_configuration" {
-  bucket = local.bucket_name
+  bucket = var.bucket_name
 
   index_document {
     suffix = "index.html"
@@ -33,7 +33,7 @@ resource "aws_s3_bucket_website_configuration" "my_website_configuration" {
 
 # Define a public access block configuration
 resource "aws_s3_bucket_public_access_block" "public_access_block_configuration" {
-  bucket = local.bucket_name
+  bucket = var.bucket_name
 
   block_public_acls       = true
   block_public_policy     = true
