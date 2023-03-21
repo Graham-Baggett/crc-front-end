@@ -39,6 +39,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
       content_security_policy = local.content_security_policy
       override = true
     }
+  }
 }
 
 resource "aws_cloudfront_distribution" "web_distribution" {
