@@ -65,6 +65,6 @@ data "aws_iam_policy_document" "allow_access_from_cloud_front" {
 }
 
 resource "aws_s3_bucket_policy" "allow_access_from_cloud_front" {
-  bucket = aws_s3_bucket.web_bucket.bucket
+  bucket = aws_s3_bucket.my_website_bucket.bucket
   policy = data.aws_iam_policy_document.allow_access_from_cloud_front.json
 }
