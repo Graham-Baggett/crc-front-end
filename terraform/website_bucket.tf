@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "allow_access_from_cloud_front" {
       "s3:GetObject",
     ]
     resources = [
-      "${aws_s3_bucket.web_bucket.arn}/*",
+      "${aws_s3_bucket.my_website_bucket.arn}/*",
     ]
     principals {
       type        = "Service"
