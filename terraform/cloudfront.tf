@@ -92,7 +92,6 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     minimum_protocol_version = "TLSv1.2_2021"
 
   }
-}
 
   tags = {
     Name = "CloudResumeChallengeCloudFront"
