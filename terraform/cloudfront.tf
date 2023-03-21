@@ -73,7 +73,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
-    
+
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers_policy.id
   }
 
