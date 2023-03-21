@@ -1,3 +1,12 @@
+locals {
+  content_security_policy = "default-src 'none'; font-src 'self' https://fonts.googleapis.com 
+                                   https://cdn.jsdelivr.net https://fonts.gstatic.com; 
+                                   connect-src 'self' https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com; 
+                                   img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none';
+                                   style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; 
+                                   frame-ancestors 'none'; manifest-src 'self'"
+}
+
 resource "aws_cloudfront_origin_access_control" "web_bucket_access_policy" {
   name                              = "allow_to_s3_from_cloud_front"
   description                       = "Allows access to an S3 web bucket from CloudFront"
@@ -83,12 +92,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
       override = true
     }
     content_security_policy {
-      content_security_policy = "default-src 'none'; font-src 'self' https://fonts.googleapis.com 
-                                   https://cdn.jsdelivr.net https://fonts.gstatic.com; 
-                                   connect-src 'self' https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com; 
-                                   img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none';
-                                   style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; 
-                                   frame-ancestors 'none'; manifest-src 'self'"
+      content_security_policy = "${jsonencode(local.content_security_policy)}"
       override = true
     }
   }
