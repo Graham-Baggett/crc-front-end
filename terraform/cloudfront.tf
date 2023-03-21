@@ -12,9 +12,9 @@ resource "aws_cloudfront_origin_access_control" "web_bucket_access_policy" {
 
 resource "aws_cloudfront_distribution" "web_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.web_bucket.bucket_regional_domain_name
+    domain_name              = aws_s3_bucket.my_website_bucket.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.web_bucket_access_policy.id
-    origin_id                = aws_s3_bucket.web_bucket.id
+    origin_id                = aws_s3_bucket.my_website_bucket.id
   }
 
   enabled             = true
@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.web_bucket.id
+    target_origin_id = aws_s3_bucket.my_website_bucket.id
 
     forwarded_values {
       query_string = false
