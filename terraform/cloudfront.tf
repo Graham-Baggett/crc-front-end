@@ -1,10 +1,10 @@
 locals {
-  content_security_policy = ${jsonencode("default-src 'none'; font-src 'self' https://fonts.googleapis.com 
+  content_security_policy = "${jsonencode("default-src 'none'; font-src 'self' https://fonts.googleapis.com 
                                    https://cdn.jsdelivr.net https://fonts.gstatic.com; 
                                    connect-src 'self' https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com; 
                                    img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none';
                                    style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; 
-                                   frame-ancestors 'none'; manifest-src 'self'")}
+                                   frame-ancestors 'none'; manifest-src 'self'")}"
 }
 
 resource "aws_cloudfront_origin_access_control" "web_bucket_access_policy" {
