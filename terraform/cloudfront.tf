@@ -1,5 +1,5 @@
 locals {
-  content_security_policy = "default-src 'none'; font-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com; img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; frame-ancestors 'none'; manifest-src 'self'"
+  content_security_policy = "default-src 'none'; font-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src 'self' ${var.api_url}; img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; frame-ancestors 'none'; manifest-src 'self'"
 }
 
 resource "aws_cloudfront_origin_access_control" "web_bucket_access_policy" {
@@ -89,7 +89,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
   viewer_certificate {
     acm_certificate_arn      = aws_acm_certificate.certificate.arn
     ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    minimum_protocol_version = var.minimum_protocol_version
 
   }
 
