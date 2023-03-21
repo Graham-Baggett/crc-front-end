@@ -18,26 +18,26 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
     }
     frame_options {
       frame_option = "DENY"
-      override = true
+      override     = true
     }
     referrer_policy {
       referrer_policy = "strict-origin-when-cross-origin"
-      override = true
+      override        = true
     }
     xss_protection {
       mode_block = true
       protection = true
-      override = true
+      override   = true
     }
     strict_transport_security {
       access_control_max_age_sec = "63072000"
-      include_subdomains = true
-      preload = true
-      override = true
+      include_subdomains         = true
+      preload                    = true
+      override                   = true
     }
     content_security_policy {
       content_security_policy = local.content_security_policy
-      override = true
+      override                = true
     }
   }
 }
