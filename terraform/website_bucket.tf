@@ -15,7 +15,7 @@ resource "aws_s3_bucket_acl" "website_bucket_acl" {
 
 #Define an S3 Versioning setting
 resource "aws_s3_bucket_versioning" "my_website_versioning_setting" {
-  bucket = local.bucket_name
+  bucket = var.bucket_name
 
   versioning_configuration {
     status = "Enabled"
