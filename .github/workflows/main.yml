@@ -26,6 +26,7 @@ jobs:
         working-directory: ${{ env.working_directory }}
         run: |
           echo `pwd`
+          terraform validate
 #          terraform init
 #          terraform fmt -check
 #          terraform plan
