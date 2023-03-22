@@ -47,6 +47,8 @@ jobs:
         run: |
            echo `pwd`
            terraform init
+           terraform plan
+           terraform state list
            terraform state pull > terraform.tfstate
            cat terraform.tfstate
       - name: Upload Terraform state file
