@@ -38,24 +38,24 @@ jobs:
 #         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-      - name: Copy files to the production website with the AWS CLI
-        run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+#       - name: Copy files to the production website with the AWS CLI
+#         run: |
+#           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 
       - name: Terraform init, plan and apply
         working-directory: ${{ env.working_directory }}
         run: |
            echo `pwd`
            terraform init
-           terraform import 'aws_s3_bucket.my_website_bucket' gb-cloud-resume
-           terraform state list
-           terraform state pull > terraform.tfstate
-           cat terraform.tfstate
-      - name: Upload Terraform state file
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-        with:
-            name: terraform.tfstate
-            path: ./terraform/terraform.tfstate
+           terraform destroy -auto-approve
+           #terraform state list
+           #terraform state pull > terraform.tfstate
+           #cat terraform.tfstate
+#       - name: Upload Terraform state file
+#         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+#         with:
+#             name: terraform.tfstate
+#             path: ./terraform/terraform.tfstate
 #           terraform fmt -check
 #           terraform plan
 #           terraform apply -auto-approve     
