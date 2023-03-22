@@ -48,7 +48,6 @@ jobs:
            echo `pwd`
            terraform init
            terraform import 'aws_s3_bucket.my_website_bucket' gb-cloud-resume
-           terraform plan
            terraform state list
            terraform state pull > terraform.tfstate
            cat terraform.tfstate
