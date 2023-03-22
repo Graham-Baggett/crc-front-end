@@ -15,7 +15,7 @@ jobs:
     environment:
       name: production
     env:
-      working_directory: ./terraform
+      working_directory: ./terraform/global/s3
     permissions:
       id-token: write # This is required for requesting the JWT
     steps: 
@@ -42,11 +42,13 @@ jobs:
 #         run: |
 #           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 
-#       - name: Terraform init, plan and apply
-#         working-directory: ${{ env.working_directory }}
-#         run: |
-#            echo `pwd`
-#            terraform init
+      - name: Terraform init, plan and apply
+        working-directory: ${{ env.working_directory }}
+        run: |
+           echo `pwd`
+           terraform init
+           terraform plan
+           terraform fmt --diff
 #            terraform apply -auto-approve
 #            #terraform state list
 #            #terraform state pull > terraform.tfstate
