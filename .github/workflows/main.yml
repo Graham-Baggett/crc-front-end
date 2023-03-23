@@ -78,3 +78,23 @@ jobs:
             name: DAST_Report.html
             path: ./report_html.html
       
+  dast-scan: #performs Dynamic Application Security Testing against the target site
+    runs-on: ubuntu-latest
+    needs: update-infra-and-sync-site
+    container:
+      image: owasp/zap2docker-stable
+      options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@1f99358870fe1c846a3ccba386cc2b2246836776 # v2.2.1
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - name: Run ZAP baseline scan
+        run: |
+          zap-baseline.py -t https://grahambaggett.com -r report_html.html -a || echo 0
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+            name: DAST_Report.html
+            path: ./report_html.html
