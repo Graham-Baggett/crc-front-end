@@ -22,7 +22,23 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@1f99358870fe1c846a3ccba386cc2b2246836776 # v2.2.1
         with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            acm.us-east-1.amazonaws.com:443
+            checkpoint-api.hashicorp.com:443
+            cloudfront.amazonaws.com:443
+            dynamodb.us-east-1.amazonaws.com:443
+            gb-cloud-resume.s3.amazonaws.com:443
+            gb-cloud-resume.s3.us-east-1.amazonaws.com:443
+            gb-crc-terraform-state.s3.amazonaws.com:443
+            github.com:443
+            registry.terraform.io:443
+            releases.hashicorp.com:443
+            route53.amazonaws.com:443
+            s3.amazonaws.com:443
+            sts.amazonaws.com:443
+            sts.us-east-1.amazonaws.com:443
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
