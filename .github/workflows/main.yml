@@ -48,20 +48,16 @@ jobs:
            echo `pwd`
            terraform init
            terraform plan
-           terraform fmt --diff
+           terraform fmt -check
            terraform apply -auto-approve
-#            terraform apply -auto-approve
 #            #terraform state list
 #            #terraform state pull > terraform.tfstate
 #            cat terraform.tfstate
-#       - name: Upload Terraform state file
-#         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-#         with:
-#             name: terraform.tfstate
-#             path: ./terraform/terraform.tfstate
-#           terraform fmt -check
-#           terraform plan
-#           terraform apply -auto-approve     
+      - name: Upload Terraform state file
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+            name: terraform.tfstate
+            path: ./terraform/terraform.tfstate
 
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
