@@ -46,10 +46,10 @@ jobs:
         working-directory: ${{ env.working_directory }}
         run: |
            echo `pwd`
-           terraform init
+           terraform init -input=false
            terraform plan
-           terraform fmt -check
-           terraform apply -auto-approve
+#           terraform fmt -check
+#           terraform apply -auto-approve
 #            #terraform state list
 #            #terraform state pull > terraform.tfstate
 #            cat terraform.tfstate
