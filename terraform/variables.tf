@@ -12,7 +12,7 @@ variable "bucket_name" {
 
 variable "api_url" {
   type        = string
-  default     = "https://r31nk3e4ck.execute-api.us-east-1.amazonaws.com"
+  default     = "https://o1agchmnr1.execute-api.us-east-1.amazonaws.com"
   description = "API Gateway URL for Lambda Visitor Count functions"
 }
 
