@@ -10,61 +10,50 @@ permissions:
   contents: read
 
 jobs:
-  update-infra-and-sync-site: #updates AWS infrastructure and syncs S3 bucket changes
+  update-infra-and-sync-site: #updates OCI infrastructure and syncs bucket changes
     runs-on: ubuntu-latest
     environment:
       name: production
     env:
       working_directory: ./terraform
-    permissions:
-      id-token: write # This is required for requesting the JWT
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+    #permissions:
+    #  id-token: write # This is required for requesting the JWT
     steps: 
       - name: Harden Runner
         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
         with:
           disable-sudo: true
-          egress-policy: block
-          allowed-endpoints: >
-            acm.us-east-1.amazonaws.com:443
-            checkpoint-api.hashicorp.com:443
-            cloudfront.amazonaws.com:443
-            dynamodb.us-east-1.amazonaws.com:443
-            gb-cloud-resume.s3.amazonaws.com:443
-            gb-cloud-resume.s3.us-east-1.amazonaws.com:443
-            gb-crc-terraform-state.s3.amazonaws.com:443
-            github.com:443
-            registry.terraform.io:443
-            releases.hashicorp.com:443
-            route53.amazonaws.com:443
-            s3.amazonaws.com:443
-            sts.amazonaws.com:443
-            sts.us-east-1.amazonaws.com:443
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # v2.0.0
+          egress-policy: audit
+          
+      - name: Configure OCI Credentials
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: check-version
         with:
-          aws-region: us-east-1
-          role-to-assume: ${{ secrets.WRITE_ROLE }}
-          role-session-name: OIDCSession
-      - name: Download repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+          command: '--version'
+#       - name: Download repo
+#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 #       - name: Build SAM template for deployment 
 #         run: sam build
 #       - name: Deploy SAM template to AWS
 #         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-      - name: Copy files to the production website with the AWS CLI
-        run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+#       - name: Copy files to the production website with the AWS CLI
+#         run: |
+#           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 
-      - name: Terraform init, plan and apply
-        working-directory: ${{ env.working_directory }}
-        run: |
-           echo `pwd`
-           terraform init -input=false
-           terraform plan
-           terraform apply -auto-approve
+#       - name: Terraform init, plan and apply
+#         working-directory: ${{ env.working_directory }}
+#         run: |
+#            echo `pwd`
+#            terraform init -input=false
+#            terraform plan
+#            terraform apply -auto-approve
 #           terraform fmt -check
 #       - name: Upload Terraform state file
 #         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
@@ -73,23 +62,23 @@ jobs:
 #             path: ./terraform/global/s3/terraform.tfstate
 
       
-  dast-scan: #performs Dynamic Application Security Testing against the target site
-    runs-on: ubuntu-latest
-    needs: update-infra-and-sync-site
-    container:
-      image: owasp/zap2docker-stable
-      options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
-        with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+#   dast-scan: #performs Dynamic Application Security Testing against the target site
+#     runs-on: ubuntu-latest
+#     needs: update-infra-and-sync-site
+#     container:
+#       image: owasp/zap2docker-stable
+#       options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
+#     steps:
+#       - name: Harden Runner
+#         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
+#         with:
+#           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
 
-      - name: Run ZAP baseline scan
-        run: |
-          zap-baseline.py -t https://grahambaggett.com -r report_html.html -a || echo 0
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-        with:
-            name: DAST_Report.html
-            path: ./report_html.html
+#       - name: Run ZAP baseline scan
+#         run: |
+#           zap-baseline.py -t https://grahambaggett.com -r report_html.html -a || echo 0
+#       - name: Upload ZAP report
+#         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+#         with:
+#             name: DAST_Report.html
+#             path: ./report_html.html
