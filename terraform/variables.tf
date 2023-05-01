@@ -1,23 +1,21 @@
-variable "domain_name" {
+variable "compartment_ocid" {
   type        = string
-  default     = "grahambaggett.com"
-  description = "Custom domain name"
+  description = "OCID for the cloud-resume-challenge compartment"
+}
+
+variable "region" {
+  type        = string
+  default     = "us-ashburn-1"
+  description = "OCI region"
+}
+
+variable "bucket_namespace" {
+  type        = string
+  description = "OCI namespace"
 }
 
 variable "bucket_name" {
   type        = string
   default     = "gb-cloud-resume"
-  description = "Custom domain name"
-}
-
-variable "api_url" {
-  type        = string
-  default     = "https://o1agchmnr1.execute-api.us-east-1.amazonaws.com"
-  description = "API Gateway URL for Lambda Visitor Count functions"
-}
-
-variable "minimum_protocol_version" {
-  type        = string
-  default     = "TLSv1.2_2021"
-  description = "Version of Transport Layer Security"
+  description = "Bucket name for Cloud Resume Challenge"
 }
