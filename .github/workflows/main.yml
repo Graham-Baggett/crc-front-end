@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 
 on: 
   push:
     branches:
-      - oci
+      - main #oci
 
 permissions:
   contents: read
