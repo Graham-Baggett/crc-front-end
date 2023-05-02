@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 
 on: 
   push:
     branches:
-      - main #oci
+      - oci
 
 permissions:
   contents: read
@@ -21,6 +21,8 @@ jobs:
       OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
       OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
       OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+      OCI_CLI_NAMESPACE: ${{ secrets.OCI_CLI_NAMESPACE }}
+      OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
@@ -38,7 +40,8 @@ jobs:
       - name: Check OCI version
         run: oci --version
       - name: Check OCI compartments
-        run: oci iam compartment list
+        run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
+#        run: oci iam compartment list
 #       - name: Download repo
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 #       - name: Build SAM template for deployment 
