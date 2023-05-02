@@ -42,10 +42,10 @@ jobs:
       - name: 'Check Provider'
         run: |
           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
-            --compartment-id ${{secrets.OCI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
+            --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
       - name: 'Check Stack'
         run: |
-          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id ${{secrets.OCI_COMPARTMENT_OCID}} | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
