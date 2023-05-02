@@ -1,5 +1,5 @@
-name: Update AWS Environment
-run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 🚀
+name: Interact with OCI Environment
+run-name: ${{ github.actor }} is interacting with OCI in GitHub Actions 🚀
 
 on: 
   push:
@@ -39,8 +39,9 @@ jobs:
           command: 'iam compartment list'
       - name: Check OCI version
         run: oci --version
-      - name: Check OCI compartments
-        run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
+      - name: Get Configuration Source Provider Information
+        run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
+#        - name: Check OCI compartments
 #        run: oci iam compartment list
 #       - name: Download repo
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
