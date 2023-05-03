@@ -84,6 +84,15 @@ jobs:
             --wait-for-state SUCCEEDED \
             --wait-for-state FAILED \
             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Apply Cloud Resume Challenge Plan Job
+        if: ${{env.PLAN_JOB_ID != ''}}
+        run: |
+          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+            --execution-plan-strategy FROM_PLAN_JOB_ID \
+            --execution-plan-job-id $PLAN_JOB_ID \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
