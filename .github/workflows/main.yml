@@ -41,7 +41,8 @@ jobs:
           command: 'iam compartment list'
       - name: Check OCI version
         run: oci --version
-
+      - name: Create Configuration Source Provider
+        run: oci resource-manager configuration-source-provider create-github-access-token-provider --access-token ${{secrets.GITHUB_TOKEN}} --api-endpoint https://github.com/
       - name: Check Provider
         run: |
           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
