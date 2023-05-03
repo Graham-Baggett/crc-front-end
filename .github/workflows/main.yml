@@ -15,7 +15,6 @@ jobs:
     environment:
       name: production
     env:
-      working_directory: ./terraform
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
       OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
       OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
@@ -28,6 +27,7 @@ jobs:
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "Cloud Resume Challenge Stack"
       TF_VERSION: "1.2.x"
+      WORKING_DIRECTORY: ./terraform
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
@@ -71,6 +71,7 @@ jobs:
             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
             --config-source-branch-name $BRANCH_NAME \
             --config-source-repository-url $REPO_URL \
+            --config-source-working-directory $WORKING_DIRECTORY \
             --display-name "$STACK_NAME" \
             --terraform-version $TF_VERSION \
             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
@@ -78,7 +79,9 @@ jobs:
         if: ${{env.STACK_ID != ''}}
         run: |
           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-            --stack-id $STACK_ID --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
