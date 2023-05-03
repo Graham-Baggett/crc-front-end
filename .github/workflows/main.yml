@@ -63,7 +63,7 @@ jobs:
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
 #       - name: Create OCI Resource Stack
 #         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
-      - name: 'Create Stack'
+      - name: Create Cloud Resume Challenge Stack
         if: ${{env.STACK_ID == ''}}
         run: |
             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
@@ -74,6 +74,11 @@ jobs:
             --display-name "$STACK_NAME" \
             --terraform-version $TF_VERSION \
             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Create Cloud Resume Challenge Plan Job
+        if: ${{env.STACK_ID != ''}}
+        run: |
+          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --stack-id $STACK_ID --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
