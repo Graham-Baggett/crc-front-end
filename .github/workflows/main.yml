@@ -74,6 +74,7 @@ jobs:
             --config-source-working-directory $WORKING_DIRECTORY \
             --display-name "$STACK_NAME" \
             --terraform-version $TF_VERSION \
+            --variables '{"compartment_ocid": "$OCI_CLI_COMPARTMENT_OCID", "region": "$OCI_CLI_REGION", "bucket_namespace": "$OCI_CLI_NAMESPACE"}' \
             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
       - name: Create Cloud Resume Challenge Plan Job
         if: ${{env.STACK_ID != ''}}
@@ -81,6 +82,7 @@ jobs:
           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
             --stack-id $STACK_ID \
             --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED \
             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
