@@ -60,7 +60,7 @@ jobs:
           --display-name "$PROVIDER_NAME" \
           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
       - name: Create OCI Resource Stack
-        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID
+        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --debug
 #       - name: 'Create Stack'
 #         if: ${{env.STACK_ID == ''}}
 #         run: |
