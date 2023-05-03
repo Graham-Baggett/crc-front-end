@@ -23,8 +23,10 @@ jobs:
       OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
       OCI_CLI_NAMESPACE: ${{ secrets.OCI_CLI_NAMESPACE }}
       OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
-      PROVIDER_NAME: "GitHub Source Provider (Front-End)"
       BRANCH_NAME: "oci"
+      PROVIDER_NAME: "GitHub Source Provider (Front-End)"
+      REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
+      STACK_NAME: "OCI Resource Manager Cloud Resume Challenge Stack"
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
@@ -56,28 +58,23 @@ jobs:
           --api-endpoint https://github.com/ \
           --display-name "$PROVIDER_NAME" \
           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Create Configuration Source Provider
-#         if: ${{env.SOURCE_PROVIDER_ID == ''}}
-#         run: |
-#           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
-#           --access-token ${{secrets.CRC_FRONT_END_TOKEN}} \
-#           --api-endpoint https://github.com/ \
-#           --display-name "${{env.PROVIDER_NAME}}" \
-#           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Check Configuration Source Provider
-#         run: |
-#           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
-#             --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME)".id' -r)" >> $GITHUB_ENV
+      - name: 'Create Stack'
+        if: ${{env.STACK_ID == ''}}
+        run: |
+            echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
+            --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
+            --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
+            --config-source-branch-name $BRANCH_NAME \
+            --config-source-repository-url $REPO_URL \
+            --display-name "$STACK_NAME" \
+            --variables '{"compartment_ocid": "${{secrets.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.REGION}}"}' \
+            --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
 #        run: oci iam compartment list
 #       - name: Download repo
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-#       - name: Build SAM template for deployment 
-#         run: sam build
-#       - name: Deploy SAM template to AWS
-#         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
 #       - name: Copy files to the production website with the AWS CLI
