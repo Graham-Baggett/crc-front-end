@@ -26,7 +26,7 @@ jobs:
       BRANCH_NAME: "oci"
       PROVIDER_NAME: "GitHub Source Provider (Front-End)"
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
-      STACK_NAME: "OCI Resource Manager Cloud Resume Challenge Stack"
+      STACK_NAME: "Cloud Resume Challenge Stack"
       TF_VERSION: "1.2.x"
     #permissions:
     #  id-token: write # This is required for requesting the JWT
@@ -73,8 +73,7 @@ jobs:
             --config-source-repository-url $REPO_URL \
             --display-name "$STACK_NAME" \
             --terraform-version $TF_VERSION \
-            --variables '{"compartment_ocid": "${{secrets.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.REGION}}"}' \
-            --wait-for-state SUCCEEDED -d | jq '.data.id' -r)" >> $GITHUB_ENV
+            --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
