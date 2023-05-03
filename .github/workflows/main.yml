@@ -59,8 +59,10 @@ jobs:
           --api-endpoint https://github.com/ \
           --display-name "$PROVIDER_NAME" \
           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Create OCI Resource Stack
-        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version "0.12.x"
+      - name: Learn valid Terraform versions
+        run:     oci resource-manager stack list-terraform-versions
+#       - name: Create OCI Resource Stack
+#         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version "0.12.x"
 #       - name: 'Create Stack'
 #         if: ${{env.STACK_ID == ''}}
 #         run: |
