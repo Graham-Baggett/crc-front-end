@@ -5,9 +5,6 @@ on:
   push:
     branches:
       - oci
-      
-env:
-  PROVIDER_NAME: "GitHub Source Provider (Front-End)"
 
 permissions:
   contents: read
@@ -26,6 +23,7 @@ jobs:
       OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
       OCI_CLI_NAMESPACE: ${{ secrets.OCI_CLI_NAMESPACE }}
       OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
+      PROVIDER_NAME: "GitHub Source Provider (Front-End)"
       BRANCH_NAME: "oci"
     #permissions:
     #  id-token: write # This is required for requesting the JWT
@@ -54,7 +52,7 @@ jobs:
         if: ${{env.SOURCE_PROVIDER_ID == ''}}
         run: |
           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
-          --access-token ${{secrets.GITHUB_TOKEN}} \
+          --access-token ${{secrets.CRC_FRONT_END_TOKEN}} \
           --api-endpoint https://github.com/ \
           --display-name "${{env.PROVIDER_NAME}}" \
           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
