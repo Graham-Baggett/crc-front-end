@@ -27,7 +27,7 @@ jobs:
       PROVIDER_NAME: "GitHub Source Provider (Front-End)"
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "OCI Resource Manager Cloud Resume Challenge Stack"
-      TF_VERSION: "1.4.x"
+      TF_VERSION: "1.2.x"
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
@@ -62,7 +62,7 @@ jobs:
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
       - name: Create OCI Resource Stack
-        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version "1.2.x"
+        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
 #       - name: 'Create Stack'
 #         if: ${{env.STACK_ID == ''}}
 #         run: |
