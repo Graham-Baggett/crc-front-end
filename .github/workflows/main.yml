@@ -63,6 +63,7 @@ jobs:
         if: ${{env.STACK_ID == ''}}
         run: |
             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
+            --debug
             --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
             --config-source-branch-name $BRANCH_NAME \
