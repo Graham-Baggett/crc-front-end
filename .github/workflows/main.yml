@@ -41,26 +41,21 @@ jobs:
           command: 'iam compartment list'
       - name: Check OCI version
         run: oci --version
-      - name: Create Configuration Source Provider
-        run: oci resource-manager configuration-source-provider create-github-access-token-provider --access-token ${{secrets.CRC_FRONT_END_TOKEN}} --api-endpoint https://github.com/ --compartment-id $OCI_CLI_COMPARTMENT_OCID --display-name env.PROVIDER_NAME
-      - name: Check Provider
+      - name: Check Configuration Source Provider
         run: |
           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
             --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
-      - name: Check Stack
+      - name: Check OCI Resource Stack
         run: |
           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
-      - name: 'Create Provider'
+      - name: Create Configuration Source Provider
         if: ${{env.SOURCE_PROVIDER_ID == ''}}
         run: |
           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
           --access-token ${{secrets.GITHUB_TOKEN}} \
           --api-endpoint https://github.com/ \
-          --display-name $PROVIDER_NAME \
+          --display-name env.PROVIDER_NAME \
           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Check Configuration Source Provider
-#         run: |
-#           oci resource-manager configuration-source-provider list --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}       
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
