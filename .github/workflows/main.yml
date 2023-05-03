@@ -61,6 +61,7 @@ jobs:
       - name: 'Create Stack'
         if: ${{env.STACK_ID == ''}}
         run: |
+            terraform --version
             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
             --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
