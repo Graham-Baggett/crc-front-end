@@ -80,6 +80,7 @@ jobs:
         if: ${{env.STACK_ID != ''}}
         run: |
           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --display-name "Update OCI front-end infrastructure" \
             --stack-id $STACK_ID \
             --wait-for-state SUCCEEDED \
             --wait-for-state FAILED \
