@@ -98,9 +98,9 @@ jobs:
 #             --stack-id $STACK_ID \
 #             --wait-for-state SUCCEEDED \
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Copy files to the production website with the AWS CLI
+      - name: Copy files to the website bucket with the OCI CLI
         run: |
-           oci os object sync -bn gb-cloud-resume --src-dir . --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+           oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
