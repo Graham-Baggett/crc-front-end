@@ -39,62 +39,60 @@ jobs:
           
       - name: Configure OCI Credentials
         uses: oracle-actions/run-oci-cli-command@v1.1.1
-        id: find-compartment-id
-        with:
-          command: 'iam compartment list'
-      - name: Check OCI version
-        run: oci --version
-      - name: Check Configuration Source Provider
-        run: |
-          echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
-          --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
-      - name: Check OCI Resource Stack
-        run: |
-          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
-      - name: Create Configuration Source Provider
-        if: ${{env.SOURCE_PROVIDER_ID == ''}}
-        run: |
-          echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
-          --access-token ${{secrets.CRC_FRONT_END_TOKEN}} \
-          --api-endpoint https://github.com/ \
-          --display-name "$PROVIDER_NAME" \
-          --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
+#         id: find-compartment-id
+#         with:
+#           command: 'iam compartment list'
+#       - name: Check Configuration Source Provider
+#         run: |
+#           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
+#           --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
+#       - name: Check OCI Resource Stack
+#         run: |
+#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+#       - name: Create Configuration Source Provider
+#         if: ${{env.SOURCE_PROVIDER_ID == ''}}
+#         run: |
+#           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
+#           --access-token ${{secrets.CRC_FRONT_END_TOKEN}} \
+#           --api-endpoint https://github.com/ \
+#           --display-name "$PROVIDER_NAME" \
+#           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
 #       - name: Create OCI Resource Stack
 #         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
-      - name: Create Cloud Resume Challenge Stack
-        if: ${{env.STACK_ID == ''}}
-        run: |
-            echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
-            --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
-            --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
-            --config-source-branch-name $BRANCH_NAME \
-            --config-source-repository-url $REPO_URL \
-            --config-source-working-directory $WORKING_DIRECTORY \
-            --display-name "$STACK_NAME" \
-            --terraform-version $TF_VERSION \
-            --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
-            --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Create Cloud Resume Challenge Plan Job
-        if: ${{env.STACK_ID != ''}}
-        run: |
-          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-            --display-name "Terraform plan for updating OCI front-end infrastructure" \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED \
-            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Apply Cloud Resume Challenge Plan Job
-        if: ${{env.PLAN_JOB_ID != ''}}
-        run: |
-          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-            --display-name "Terraform apply for updating OCI front-end infrastructure" \
-            --execution-plan-strategy FROM_PLAN_JOB_ID \
-            --execution-plan-job-id $PLAN_JOB_ID \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Create Cloud Resume Challenge Stack
+#         if: ${{env.STACK_ID == ''}}
+#         run: |
+#             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
+#             --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
+#             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
+#             --config-source-branch-name $BRANCH_NAME \
+#             --config-source-repository-url $REPO_URL \
+#             --config-source-working-directory $WORKING_DIRECTORY \
+#             --display-name "$STACK_NAME" \
+#             --terraform-version $TF_VERSION \
+#             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
+#             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Create Cloud Resume Challenge Plan Job
+#         if: ${{env.STACK_ID != ''}}
+#         run: |
+#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED \
+#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Apply Cloud Resume Challenge Plan Job
+#         if: ${{env.PLAN_JOB_ID != ''}}
+#         run: |
+#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
+#             --execution-plan-strategy FROM_PLAN_JOB_ID \
+#             --execution-plan-job-id $PLAN_JOB_ID \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
