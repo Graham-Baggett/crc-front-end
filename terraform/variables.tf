@@ -19,3 +19,9 @@ variable "bucket_name" {
   default     = "gb-cloud-resume"
   description = "Bucket name for Cloud Resume Challenge"
 }
+
+variable "bucket_access_type" {
+  type        = string
+  default     = "ObjectRead"
+  description = "Access Policy for Cloud Resume Challenge bucket"
+} 
