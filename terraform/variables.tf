@@ -25,3 +25,15 @@ variable "bucket_access_type" {
   default     = "ObjectRead"
   description = "Access Policy for Cloud Resume Challenge bucket"
 } 
+
+variable "zone_name" {
+  type        = string
+  default     = "OCI Hosted Zone for Custom Domain"
+  description = "Name of Hosted Zone for Cloud Resume Challenge"
+}
+
+variable "zone_type" {
+  type        = string
+  default     = "PRIMARY"
+  description = "Hosted Zone Type for Cloud Resume Challenge"
+}
