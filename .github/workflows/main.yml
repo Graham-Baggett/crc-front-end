@@ -98,11 +98,12 @@ jobs:
 #             --stack-id $STACK_ID \
 #             --wait-for-state SUCCEEDED \
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Download repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Copy files to the website bucket with the OCI CLI
         run: |
-           pwd
            ls -la
-           oci os object sync -bn gb-cloud-resume --src-dir /home/runner/work/crc-front-end/crc-front-end/html --dry-run #--include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+           oci os object sync -bn gb-cloud-resume --src-dir . --dry-run #--include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 #       - name: Get Configuration Source Provider Information
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
