@@ -23,6 +23,7 @@ jobs:
       OCI_CLI_NAMESPACE: ${{ secrets.OCI_CLI_NAMESPACE }}
       OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
       BRANCH_NAME: "oci"
+      BUCKET_NAME: "gb-cloud-resume"
       PROVIDER_NAME: "GitHub Source Provider (Front-End)"
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "Cloud Resume Challenge Stack"
@@ -39,6 +40,10 @@ jobs:
           
       - name: Configure OCI Credentials
         uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: list-bucket-contents
+        with:
+           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+
 #         id: find-compartment-id
 #         with:
 #           command: 'iam compartment list'
