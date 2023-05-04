@@ -28,7 +28,7 @@ variable "bucket_access_type" {
 
 variable "zone_name" {
   type        = string
-  default     = "OCI Hosted Zone for Custom Domain"
+  default     = "grahambaggett.net"
   description = "Name of Hosted Zone for Cloud Resume Challenge"
 }
 
