@@ -38,7 +38,7 @@ variable "zone_type" {
   description = "Hosted Zone Type for Cloud Resume Challenge"
 }
 
-variable "rrset_domain" {
+variable "domain_name" {
   type        = string
   default     = "grahambaggett.net"
   description = "Domain Name for Cloud Resume Challenge"
@@ -60,4 +60,28 @@ variable "rrset_items_ttl" {
   type        = number
   default     = 3600
   description = "Domain where Cloud Resume Challenge website resides"
+}
+
+variable "redirect_target_host" {
+  type        = string
+  default     = "objectstorage.us-ashburn-1.oraclecloud.com"
+  description = "Base URL where Cloud Resume Challenge website resides"
+}
+
+variable "redirect_target_path" {
+  type        = string
+  default     = "/n/idixwybnkjfi/b/gb-cloud-resume/o/html/index.html"
+  description = "Path where Cloud Resume Challenge index site resides"
+}
+
+variable "redirect_target_protocol" {
+  type        = string
+  default     = "https"
+  description = "TCP/IP Protocol for the Cloud Resume Challenge website"
+}
+
+variable "redirect_target_port" {
+  type        = number
+  default     = 443
+  description = "TCP/IP Protocol Port for the Cloud Resume Challenge website"
 }
