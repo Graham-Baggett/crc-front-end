@@ -104,12 +104,6 @@ variable "http_redirect_target_query" {
   description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
 }
 
-variable "http_redirect_target_query" {
-  type        = string
-  default     = ""
-  description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
-}
-
 variable "vnc_cidr_block" {
   type        = list
   default     = ["10.0.0.0/16"]
