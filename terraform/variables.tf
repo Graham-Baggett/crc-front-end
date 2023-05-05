@@ -49,3 +49,15 @@ variable "rrset_a_rtype" {
   default     = "A"
   description = "'A' DNS Record for Cloud Resume Challenge"
 }
+
+variable "rrset_items_rdata" {
+  type        = string
+  default     = "objectstorage.us-ashburn-1.oraclecloud.com."
+  description = "Domain where Cloud Resume Challenge website resides"
+}
+
+variable "rrset_items_ttl" {
+  type        = number
+  default     = 3600
+  description = "Domain where Cloud Resume Challenge website resides"
+}
