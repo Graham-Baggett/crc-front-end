@@ -76,7 +76,7 @@ variable "http_redirect_target_path" {
 
 variable "http_redirect_target_protocol" {
   type        = string
-  default     = "https"
+  default     = "HTTPS"
   description = "TCP/IP Protocol for the Cloud Resume Challenge website"
 }
 
