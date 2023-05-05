@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is interacting with OCI in GitHub Actions 🚀
 on: 
   push:
     branches:
-      - main
+      - oci
 
 permissions:
   contents: read
@@ -111,23 +111,6 @@ jobs:
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-#       - name: Copy files to the production website with the AWS CLI
-#         run: |
-#           aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
-
-#       - name: Terraform init, plan and apply
-#         working-directory: ${{ env.working_directory }}
-#         run: |
-#            echo `pwd`
-#            terraform init -input=false
-#            terraform plan
-#            terraform apply -auto-approve
-#           terraform fmt -check
-#       - name: Upload Terraform state file
-#         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-#         with:
-#             name: terraform.tfstate
-#             path: ./terraform/global/s3/terraform.tfstate
 
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
