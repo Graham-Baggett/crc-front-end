@@ -85,3 +85,9 @@ variable "redirect_target_port" {
   default     = 443
   description = "TCP/IP Protocol Port for the Cloud Resume Challenge website"
 }
+
+variable "http_redirect_display_name" {
+  type        = string
+  default     = "Custom Domain HTTP Redirect Rule"
+  description = "Rule for redirecting traffic from custom domain to Cloud Resume Challenge website bucket"
+}
