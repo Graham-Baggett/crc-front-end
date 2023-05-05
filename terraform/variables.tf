@@ -97,3 +97,9 @@ variable "http_redirect_response_code" {
   default     = 302
   description = "HTTP Redirect response code"
 }
+
+variable "http_redirect_target_query" {
+  type        = string
+  default     = ""
+  description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
+}
