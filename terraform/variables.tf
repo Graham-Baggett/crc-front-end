@@ -91,3 +91,9 @@ variable "http_redirect_display_name" {
   default     = "Custom Domain HTTP Redirect Rule"
   description = "Rule for redirecting traffic from custom domain to Cloud Resume Challenge website bucket"
 }
+
+variable "http_redirect_response_code" {
+  type        = number
+  default     = 302
+  description = "HTTP Redirect response code"
+}
