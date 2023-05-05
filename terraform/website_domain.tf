@@ -10,4 +10,12 @@ resource "oci_dns_rrset" "zone_rrset" {
     domain = var.rrset_domain
     rtype = var.rrset_a_rtype
     zone_name_or_id = oci_dns_zone.hosted_zone.id
+    
+    items {
+        #Required
+        domain = var.rrset_domain
+        rdata = var.rrset_items_rdata
+        rtype = var.rrset_a_rtype
+        ttl = var.rrset_items_ttl
+    }
 }
