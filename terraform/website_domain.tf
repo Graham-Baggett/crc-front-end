@@ -29,6 +29,7 @@ resource "oci_waas_http_redirect" "custom_domain_http_redirect" {
         host = var.http_redirect_target_host
         path = var.http_redirect_target_path
         protocol = var.http_redirect_target_protocol
+        query = var.http_redirect_target_query
 
         #Optional
         port = var.http_redirect_target_port
