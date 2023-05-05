@@ -103,3 +103,27 @@ variable "http_redirect_target_query" {
   default     = ""
   description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
 }
+
+variable "http_redirect_target_query" {
+  type        = string
+  default     = ""
+  description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
+}
+
+variable "vnc_cidr_block" {
+  type        = list
+  default     = ["10.0.0.0/16"]
+  description = "Classless Inter-Domain Routing block for the Cloud Resume Challenge OCI Virtual Cloud Network"
+}
+
+variable "private_subnet_cidr_block" {
+  type        = string
+  default     = "10.0.1.0/24"
+  description = "Classless Inter-Domain Routing block for the private subnet of the Cloud Resume Challenge OCI Virtual Cloud Network"
+}
+
+variable "public_subnet_cidr_block" {
+  type        = string
+  default     = "10.0.2.0/24"
+  description = "Classless Inter-Domain Routing block for the public subnet of the Cloud Resume Challenge OCI Virtual Cloud Network"
+}
