@@ -37,3 +37,15 @@ variable "zone_type" {
   default     = "PRIMARY"
   description = "Hosted Zone Type for Cloud Resume Challenge"
 }
+
+variable "rrset_domain" {
+  type        = string
+  default     = "grahambaggett.net"
+  description = "Domain Name for Cloud Resume Challenge"
+}
+
+variable "rrset_a_rtype" {
+  type        = string
+  default     = "A"
+  description = "'A' DNS Record for Cloud Resume Challenge"
+}
