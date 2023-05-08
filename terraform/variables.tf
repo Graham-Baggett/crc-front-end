@@ -124,8 +124,7 @@ variable "public_subnet_cidr_block" {
 
 variable "ingress_variables" {
   default = {
-    protocol  = "all"
-    source    = "192.168.1.0/24"
-    stateless = true
+    source_type = "CIDR_BLOCK"
+    stateless = false
   }
 }
