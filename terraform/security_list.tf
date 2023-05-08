@@ -5,8 +5,8 @@ resource "oci_core_security_list" "public_security_list" {
   
   ingress_security_rules {
     description = "Main VCN Ingress Rules"
-    protocol    = var.ingress["protocol"]
-    source      = var.ingress["source"]
-    stateless   = var.ingress["stateless"]
+    protocol    = var.ingress_variables["protocol"]
+    source      = var.ingress_variables["source"]
+    stateless   = var.ingress_variables["stateless"]
   }
 }
