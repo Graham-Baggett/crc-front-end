@@ -5,7 +5,3 @@ resource "oci_objectstorage_bucket" "create_bucket" {
     namespace = var.bucket_namespace
     access_type = var.bucket_access_type
 }
-
-output "new_bucket" {
-    value = oci_objectstorage_bucket.create_bucket
-}
