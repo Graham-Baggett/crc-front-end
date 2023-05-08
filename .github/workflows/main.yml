@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is interacting with OCI in GitHub Actions 🚀
 on: 
   push:
     branches:
-      - oci
+      - main
 
 permissions:
   contents: read
