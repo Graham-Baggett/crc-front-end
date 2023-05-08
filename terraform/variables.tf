@@ -121,3 +121,10 @@ variable "public_subnet_cidr_block" {
   default     = "10.0.2.0/24"
   description = "Classless Inter-Domain Routing block for the public subnet of the Cloud Resume Challenge OCI Virtual Cloud Network"
 }
+
+variable "ingress_variables" {
+  default = {
+    protocol  = "all"
+    source    = "192.168.1.0/24"
+    stateless = true
+  }
