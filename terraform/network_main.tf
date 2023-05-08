@@ -1,5 +1,5 @@
-# Create the OCI VCN 
-resource "oci_core_vcn" "vcn" {
+# Create the main OCI VCN 
+resource "oci_core_vcn" "main_vcn" {
   cidr_blocks    = var.vnc_cidr_block
   compartment_id = var.compartment_ocid
   is_ipv6enabled = false
@@ -9,7 +9,7 @@ resource "oci_core_vcn" "vcn" {
 # Create the DHCP Options
 resource "oci_core_dhcp_options" "dhcp" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   display_name   = "cloud-resume-challenge-dhcp-options"
 
   options {
@@ -26,14 +26,14 @@ resource "oci_core_dhcp_options" "dhcp" {
 # Create the Internet Gateway
 resource "oci_core_internet_gateway" "igw" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   display_name   = "cloud-resume-challenge-internet-gateway"
 }
 
 # Create a Route Table for the Internet Gateway
 resource "oci_core_route_table" "igw_route_table" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   display_name   = "cloud-resume-challenge-internet-gateway-route-table"
   
   route_rules {
@@ -46,7 +46,7 @@ resource "oci_core_route_table" "igw_route_table" {
 # Create a Public Subnet
 resource "oci_core_subnet" "public_subnet" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   cidr_block     = var.vnc_public_subnet_cidr_block
   display_name   = "cloud-resume-challenge-public-subnet"
 
@@ -58,14 +58,14 @@ resource "oci_core_subnet" "public_subnet" {
 # Create a NAT Gateway
 resource "oci_core_nat_gateway" "nat_gateway" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   display_name   = "cloud-resume-challenge-network-address-translation-gateway"
 }
 
 # Create a Route Table for the NAT Gateway
 resource "oci_core_route_table" "nat_route_table" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   display_name   = "cloud-resume-challenge-network-address-translation-route-table"
 
   route_rules {
@@ -78,7 +78,7 @@ resource "oci_core_route_table" "nat_route_table" {
 # Create a Private Subnet
 resource "oci_core_subnet" "private_subnet" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.vcn.id
+  vcn_id         = oci_core_vcn.main_vcn.id
   cidr_block     = var.private_subnet_cidr_block
   display_name   = "cloud-resume-challenge-private-subnet"
 
