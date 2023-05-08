@@ -122,6 +122,13 @@ variable "public_subnet_cidr_block" {
   description = "Classless Inter-Domain Routing block for the public subnet of the Cloud Resume Challenge OCI Virtual Cloud Network"
 }
 
+variable "egress_variables" {
+  default = {
+    source_type = "CIDR_BLOCK"
+    stateless = false
+  }
+}
+
 variable "ingress_variables" {
   default = {
     source_type = "CIDR_BLOCK"
