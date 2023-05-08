@@ -47,7 +47,7 @@ resource "oci_core_route_table" "igw_route_table" {
 resource "oci_core_subnet" "public_subnet" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.main_vcn.id
-  cidr_block     = var.vnc_public_subnet_cidr_block
+  cidr_block     = var.public_subnet_cidr_block
   display_name   = "cloud-resume-challenge-public-subnet"
 
   route_table_id    = oci_core_route_table.igw_route_table.id
