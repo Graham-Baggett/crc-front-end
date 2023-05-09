@@ -38,11 +38,11 @@ jobs:
           disable-sudo: true
           egress-policy: audit
           
-#       - name: Install OCI and run a command
-#         uses: oracle-actions/run-oci-cli-command@v1.1.1
-#         id: list-bucket-contents
-#         with:
-#            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+      - name: Install OCI and run a command
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: list-bucket-contents
+        with:
+           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
 
 #         id: find-compartment-id
 #         with:
