@@ -111,14 +111,13 @@ jobs:
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-      - name: Unshallow Git Fetch
+      - name: Change file timestamps to last modification date
         run: |
           git fetch --unshallow
-          cd html
-          ls -la
           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
-          ls -la    
-
+      - name: Copy files to the website bucket with the OCI CLI
+        run: |
+          oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
