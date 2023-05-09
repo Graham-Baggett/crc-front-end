@@ -112,7 +112,9 @@ jobs:
 #       - name: Check deployment status
 #         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
       - name: Unshallow Git Fetch
-        run: git fetch --unshallow
+        run: |
+          git fetch --unshallow
+          for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
