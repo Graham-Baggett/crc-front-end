@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is interacting with OCI in GitHub Actions 🚀
 on: 
   push:
     branches:
-      - oci
+      - main
 
 permissions:
   contents: read
@@ -98,8 +98,12 @@ jobs:
 #             --stack-id $STACK_ID \
 #             --wait-for-state SUCCEEDED \
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Download repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+#       - name: Download repo
+#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+#       - name: Change file timestamps to last modification date
+#         run: |
+#           git fetch --unshallow
+#           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
 #       - name: Copy files to the website bucket with the OCI CLI
 #         run: |
 #            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
@@ -107,17 +111,6 @@ jobs:
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
 #        run: oci iam compartment list
-#       - name: Download repo
-#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-#       - name: Check deployment status
-#         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-      - name: Change file timestamps to last modification date
-        run: |
-          git fetch --unshallow
-          for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
-      - name: Copy files to the website bucket with the OCI CLI
-        run: |
-          oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
