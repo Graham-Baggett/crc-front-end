@@ -114,7 +114,11 @@ jobs:
       - name: Unshallow Git Fetch
         run: |
           git fetch --unshallow
+          cd html
+          ls -la
           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
+          ls -la    
+
       
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
