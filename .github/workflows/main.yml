@@ -44,7 +44,8 @@ jobs:
         with:
            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
       - name: Install Fn
-        run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+        run: curl -0 https://github.com/fnproject/cli/releases/download/0.5.29/fn_linux
+        #run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
 #         id: find-compartment-id
 #         with:
