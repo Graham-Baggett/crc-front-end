@@ -138,7 +138,7 @@ variable "ingress_variables" {
 
 variable "container_registry_name" {
   type        = string
-  default     = "Cloud-Resume-Challenge/Functions"
+  default     = "cloud-resume-challenge/functions"
   description = "Name of the OCI Container Registry"
 }
 
