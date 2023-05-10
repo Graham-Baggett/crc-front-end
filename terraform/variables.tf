@@ -141,3 +141,9 @@ variable "container_registry_name" {
   default     = "Cloud-Resume-Challenge/Functions"
   description = "Name of the OCI Container Registry"
 }
+
+variable "website_display_function_name" {
+  type        = string
+  default     = "website-display-function"
+  description = "Name of the function that returns the index.html file"
+}
