@@ -135,3 +135,9 @@ variable "ingress_variables" {
     stateless = false
   }
 }
+
+variable "container_registry_name" {
+  type        = string
+  default     = "Cloud Resume Challenge Container Registry"
+  description = "Name of the OCI Container Registry"
+}
