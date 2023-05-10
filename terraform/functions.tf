@@ -2,7 +2,7 @@
 resource "oci_artifacts_container_repository" "container_repository_for_function" {
     # note: repository = store for all images versions of a specific container image - so it included the function name
     compartment_id = var.compartment_ocid
-    display_name = var.container_registry_name
+    display_name = "${var.container_registry_name}/${var.website_display_function_name}"
     is_immutable = false
     is_public = false
 }
