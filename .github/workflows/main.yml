@@ -117,7 +117,7 @@ jobs:
 #        - name: Check OCI compartments
 #        run: oci iam compartment list
       - name: Login to OCIR
-      - env:
+        env:
           OCI_CLI_AUTH_TOKEN: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
         run: echo '$OCI_CLI_AUTH_TOKEN' |  docker login $OCIR_DOCKER_REPOSITORY --username $OCI_CLI_NAMESPACE/$OCI_CLI_USER --password-stdin
 
