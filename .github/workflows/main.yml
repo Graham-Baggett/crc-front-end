@@ -134,7 +134,7 @@ jobs:
 #           curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install
 #           ls -la
        - name: Install Fn
-         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh -S
+         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
