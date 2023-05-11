@@ -127,6 +127,10 @@ jobs:
           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
           username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
+      - name: Check to see if Docker is running
+        run: docker info
+#       - name: Install Fn
+#         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
