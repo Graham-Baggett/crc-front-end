@@ -129,6 +129,10 @@ jobs:
           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
       - name: Check to see if Docker is running
         run: docker info
+      - name: Get Fn installation file
+        run: |
+          curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install
+          ls -la
 #       - name: Install Fn
 #         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
