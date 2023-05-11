@@ -125,7 +125,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-          username: "${{ env.OCI_CLI_NAMESPACE }}/${{ env.OCI_CLI_USERNAME }}"
+          username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
