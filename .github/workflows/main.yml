@@ -116,12 +116,17 @@ jobs:
 #         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
 #        - name: Check OCI compartments
 #        run: oci iam compartment list
+#       - name: Login to OCIR
+#         env:
+#           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+#           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
+#         run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
       - name: Login to OCIR
-        env:
-          OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-          OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
-        run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
-
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+          username: "${{ env.OCI_CLI_NAMESPACE }}/${{ env.OCI_CLI_USERNAME }}"
+          password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
 #     runs-on: ubuntu-latest
