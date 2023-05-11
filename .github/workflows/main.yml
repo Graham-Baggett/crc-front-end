@@ -45,11 +45,6 @@ jobs:
         id: list-bucket-contents
         with:
            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
-#       - name: Install Fn
-#         run: |
-#           curl -0 https://github.com/fnproject/cli/releases/download/0.5.29/fn_linux
-#           fn --version
-#         #run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
 #         id: find-compartment-id
 #         with:
@@ -123,18 +118,13 @@ jobs:
 #           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
 #           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
 #         run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
-#       - name: Login to OCIR
-#         uses: docker/login-action@v2
-#         with:
-#           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-#           username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
-#           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
-#       - name: Check to see if Docker is running
-#         run: docker info
-#       - name: Get Fn installation file
-#         run: |
-#           curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install
-#           ls -la
+      - name: Login to OCIR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+          username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
+          password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
+    
 
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
