@@ -15,7 +15,7 @@ jobs:
     environment:
       name: production
     env:
-      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }} #The OCID of the user
       OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
       OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
       OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
@@ -120,7 +120,8 @@ jobs:
         env:
           OCI_CLI_AUTH_TOKEN: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-        run: echo '${{env.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "${{env.OCI_CLI_NAMESPACE}}/${{env.OCI_CLI_USER}}" --password-stdin
+          OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
+        run: echo '${{env.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "${{env.OCI_CLI_NAMESPACE}}/${{env.OCI_CLI_USERNAME}}" --password-stdin
 
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
