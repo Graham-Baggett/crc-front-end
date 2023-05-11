@@ -121,7 +121,7 @@ jobs:
           OCI_CLI_AUTH_TOKEN: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
-        run: echo '${{env.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "${{env.OCI_CLI_NAMESPACE}}/${{env.OCI_CLI_USERNAME}}" --password-stdin
+        run: echo '${{env.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
 
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
