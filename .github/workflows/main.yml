@@ -32,13 +32,13 @@ jobs:
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
-      - name: Install Fn
-        run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
-      - name: Harden Runner
-        uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
-        with:
-          disable-sudo: false
-          egress-policy: audit
+#       - name: Install Fn
+#         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+#       - name: Harden Runner
+#         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
+#         with:
+#           disable-sudo: false
+#           egress-policy: audit
           
       - name: Install OCI and run a command
         uses: oracle-actions/run-oci-cli-command@v1.1.1
@@ -66,8 +66,8 @@ jobs:
 #           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
-#       - name: Create OCI Resource Stack
-#         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
+      - name: Create OCI Resource Stack
+        run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
 #       - name: Create Cloud Resume Challenge Stack
 #         if: ${{env.STACK_ID == ''}}
 #         run: |
@@ -81,25 +81,25 @@ jobs:
 #             --terraform-version $TF_VERSION \
 #             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Create Cloud Resume Challenge Plan Job
-#         if: ${{env.STACK_ID != ''}}
-#         run: |
-#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED \
-#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Apply Cloud Resume Challenge Plan Job
-#         if: ${{env.PLAN_JOB_ID != ''}}
-#         run: |
-#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
-#             --execution-plan-strategy FROM_PLAN_JOB_ID \
-#             --execution-plan-job-id $PLAN_JOB_ID \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Create Cloud Resume Challenge Plan Job
+        if: ${{env.STACK_ID != ''}}
+        run: |
+          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --display-name "Terraform plan for updating OCI front-end infrastructure" \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED \
+            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Apply Cloud Resume Challenge Plan Job
+        if: ${{env.PLAN_JOB_ID != ''}}
+        run: |
+          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+            --display-name "Terraform apply for updating OCI front-end infrastructure" \
+            --execution-plan-strategy FROM_PLAN_JOB_ID \
+            --execution-plan-job-id $PLAN_JOB_ID \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Download repo
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 #       - name: Change file timestamps to last modification date
@@ -118,12 +118,12 @@ jobs:
 #           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
 #           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
 #         run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
-      - name: Login to OCIR
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-          username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
-          password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
+#       - name: Login to OCIR
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+#           username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
+#           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
     
 
 
