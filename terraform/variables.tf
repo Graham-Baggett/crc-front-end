@@ -51,6 +51,13 @@ variable "egress_variables" {
   }
 }
 
+variable "function_name" {
+  type        = string
+  default     = "get_website"
+  description = "Website Retrieval OCI Function Name"
+}
+
+
 variable "http_redirect_target_host" {
   type        = string
   default     = "objectstorage.us-ashburn-1.oraclecloud.com"
@@ -158,4 +165,10 @@ variable "zone_type" {
   type        = string
   default     = "PRIMARY"
   description = "Hosted Zone Type for Cloud Resume Challenge"
+}
+
+locals {
+  ocir_repo_name = "cloud-resume-challenge/functions"  
+  ocir_docker_repository = join("", [lower(lookup(data.oci_identity_regions.oci_regions.regions[0], "key")), ".ocir.io"])
+  ocir_namespace         = lookup(data.oci_objectstorage_namespace.os_namespace, "namespace")
 }
