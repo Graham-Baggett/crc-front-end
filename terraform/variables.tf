@@ -1,23 +1,7 @@
-variable "compartment_ocid" {
+variable "application_name" {
   type        = string
-  description = "OCID for the cloud-resume-challenge compartment"
-}
-
-variable "region" {
-  type        = string
-  default     = "us-ashburn-1"
-  description = "OCI region"
-}
-
-variable "bucket_namespace" {
-  type        = string
-  description = "OCI namespace"
-}
-
-variable "bucket_name" {
-  type        = string
-  default     = "gb-cloud-resume"
-  description = "Bucket name for Cloud Resume Challenge"
+  default     = "cloud-resume-challenge-app"
+  description = "Name of Cloud Resume Challenge Application"
 }
 
 variable "bucket_access_type" {
@@ -26,16 +10,20 @@ variable "bucket_access_type" {
   description = "Access Policy for Cloud Resume Challenge bucket"
 } 
 
-variable "zone_name" {
+variable "bucket_name" {
   type        = string
-  default     = "grahambaggett.net"
-  description = "Name of Hosted Zone for Cloud Resume Challenge"
+  default     = "gb-cloud-resume"
+  description = "Bucket name for Cloud Resume Challenge"
 }
 
-variable "zone_type" {
+variable "bucket_namespace" {
   type        = string
-  default     = "PRIMARY"
-  description = "Hosted Zone Type for Cloud Resume Challenge"
+  description = "OCI namespace"
+}
+
+variable "compartment_ocid" {
+  type        = string
+  description = "OCID for the cloud-resume-challenge compartment"
 }
 
 variable "domain_name" {
@@ -44,22 +32,11 @@ variable "domain_name" {
   description = "Domain Name for Cloud Resume Challenge"
 }
 
-variable "rrset_a_rtype" {
-  type        = string
-  default     = "A"
-  description = "'A' DNS Record for Cloud Resume Challenge"
-}
-
-variable "rrset_items_rdata" {
-  type        = string
-  default     = "objectstorage.us-ashburn-1.oraclecloud.com."
-  description = "Domain where Cloud Resume Challenge website resides"
-}
-
-variable "rrset_items_ttl" {
-  type        = number
-  default     = 3600
-  description = "Domain where Cloud Resume Challenge website resides"
+variable "egress_variables" {
+  default = {
+    source_type = "CIDR_BLOCK"
+    stateless = false
+  }
 }
 
 variable "http_redirect_target_host" {
@@ -104,10 +81,11 @@ variable "http_redirect_target_query" {
   description = "Query string for the rule redirecting traffic from the custom domain to the Cloud Resume Challenge website bucket"
 }
 
-variable "vnc_cidr_block" {
-  type        = list
-  default     = ["10.0.0.0/16"]
-  description = "Classless Inter-Domain Routing block for the Cloud Resume Challenge OCI Virtual Cloud Network"
+variable "ingress_variables" {
+  default = {
+    source_type = "CIDR_BLOCK"
+    stateless = false
+  }
 }
 
 variable "private_subnet_cidr_block" {
@@ -122,28 +100,50 @@ variable "public_subnet_cidr_block" {
   description = "Classless Inter-Domain Routing block for the public subnet of the Cloud Resume Challenge OCI Virtual Cloud Network"
 }
 
-variable "egress_variables" {
-  default = {
-    source_type = "CIDR_BLOCK"
-    stateless = false
-  }
-}
-
-variable "ingress_variables" {
-  default = {
-    source_type = "CIDR_BLOCK"
-    stateless = false
-  }
-}
-
-variable "container_registry_name" {
+variable "region" {
   type        = string
-  default     = "cloud-resume-challenge/functions"
-  description = "Name of the OCI Container Registry"
+  default     = "us-ashburn-1"
+  description = "OCI region"
+}
+
+variable "rrset_a_rtype" {
+  type        = string
+  default     = "A"
+  description = "'A' DNS Record for Cloud Resume Challenge"
+}
+
+variable "rrset_items_rdata" {
+  type        = string
+  default     = "objectstorage.us-ashburn-1.oraclecloud.com."
+  description = "Domain where Cloud Resume Challenge website resides"
+}
+
+variable "rrset_items_ttl" {
+  type        = number
+  default     = 3600
+  description = "Domain where Cloud Resume Challenge website resides"
+}
+
+variable "vnc_cidr_block" {
+  type        = list
+  default     = ["10.0.0.0/16"]
+  description = "Classless Inter-Domain Routing block for the Cloud Resume Challenge OCI Virtual Cloud Network"
 }
 
 variable "website_display_function_name" {
   type        = string
   default     = "website-display-function"
   description = "Name of the function that returns the index.html file"
+}
+
+variable "zone_name" {
+  type        = string
+  default     = "grahambaggett.net"
+  description = "Name of Hosted Zone for Cloud Resume Challenge"
+}
+
+variable "zone_type" {
+  type        = string
+  default     = "PRIMARY"
+  description = "Hosted Zone Type for Cloud Resume Challenge"
 }
