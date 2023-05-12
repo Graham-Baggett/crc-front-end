@@ -143,6 +143,12 @@ variable "rrset_items_ttl" {
   description = "Domain where Cloud Resume Challenge website resides"
 }
 
+#value defined in the variables section in OCI Resource Manager
+variable "tenancy_ocid" {
+  type        = string
+  description = "Tenancy OCID"
+}
+
 variable "vnc_cidr_block" {
   type        = list
   default     = ["10.0.0.0/16"]
