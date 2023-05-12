@@ -38,6 +38,12 @@ variable "domain_name" {
   description = "Domain Name for Cloud Resume Challenge"
 }
 
+variable "endpoint_type" {
+  type        = string
+  default     = "PUBLIC"
+  description = "Type of API Gateway Endpoint"
+}
+
 variable "egress_variables" {
   default = {
     source_type = "CIDR_BLOCK"
