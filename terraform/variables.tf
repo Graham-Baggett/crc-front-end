@@ -143,6 +143,8 @@ variable "rrset_items_ttl" {
   description = "Domain where Cloud Resume Challenge website resides"
 }
 
+variable "tenancy_ocid" {}
+
 variable "vnc_cidr_block" {
   type        = list
   default     = ["10.0.0.0/16"]
