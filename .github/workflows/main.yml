@@ -32,19 +32,19 @@ jobs:
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
-#       - name: Install Fn
-#         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
-#       - name: Harden Runner
-#         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
-#         with:
-#           disable-sudo: false
-#           egress-policy: audit
-          
-      - name: Install OCI and run a command
-        uses: oracle-actions/run-oci-cli-command@v1.1.1
-        id: list-bucket-contents
+      - name: Install Fn
+        run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+      - name: Harden Runner
+        uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
         with:
-           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+          disable-sudo: false
+          egress-policy: audit
+          
+#       - name: Install OCI and run a command
+#         uses: oracle-actions/run-oci-cli-command@v1.1.1
+#         id: list-bucket-contents
+#         with:
+#            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
 
 #         id: find-compartment-id
 #         with:
@@ -53,9 +53,9 @@ jobs:
 #         run: |
 #           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
 #           --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
-      - name: Check OCI Resource Stack
-        run: |
-          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+#       - name: Check OCI Resource Stack
+#         run: |
+#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 #      - name: Create Configuration Source Provider
 #         if: ${{env.SOURCE_PROVIDER_ID == ''}}
 #         run: |
@@ -81,27 +81,31 @@ jobs:
 #             --terraform-version $TF_VERSION \
 #             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Create Cloud Resume Challenge Plan Job
-        if: ${{env.STACK_ID != ''}}
+#       - name: Create Cloud Resume Challenge Plan Job
+#         if: ${{env.STACK_ID != ''}}
+#         run: |
+#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED \
+#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Apply Cloud Resume Challenge Plan Job
+#         if: ${{env.PLAN_JOB_ID != ''}}
+#         run: |
+#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
+#             --execution-plan-strategy FROM_PLAN_JOB_ID \
+#             --execution-plan-job-id $PLAN_JOB_ID \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Download repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - name: Test Fn
         run: |
-          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-            --display-name "Terraform plan for updating OCI front-end infrastructure" \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED \
-            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Apply Cloud Resume Challenge Plan Job
-        if: ${{env.PLAN_JOB_ID != ''}}
-        run: |
-          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-            --display-name "Terraform apply for updating OCI front-end infrastructure" \
-            --execution-plan-strategy FROM_PLAN_JOB_ID \
-            --execution-plan-job-id $PLAN_JOB_ID \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Download repo
-#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+          cd functions/website-display
+          fn --version
 #       - name: Change file timestamps to last modification date
 #         run: |
 #           git fetch --unshallow
