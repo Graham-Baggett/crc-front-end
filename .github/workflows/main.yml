@@ -107,7 +107,7 @@ jobs:
           cd functions/website-display
           fn build --verbose
       - name: Tag Container
-        run: docker images | grep get_website
+        run: docker images | grep get_website | print $3
 #       - name: Push Container into Registry
 #         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
           
