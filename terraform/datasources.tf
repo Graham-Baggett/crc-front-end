@@ -1,3 +1,5 @@
+variable tenancy_ocid {}
+
 data "oci_functions_applications" "crc_function_applications" {
   compartment_id = var.compartment_ocid
   display_name   = "${var.application_name}"
@@ -9,7 +11,7 @@ locals {
 
 # Gets home and current regions
 data "oci_identity_tenancy" "tenant_details" {
-  tenancy_id = var.tenancy_ocid
+  tenancy_id = "${var.tenancy_ocid}"
 }
 
 data "oci_identity_regions" "home_region" {
@@ -21,7 +23,7 @@ data "oci_identity_regions" "home_region" {
 
 
 data "oci_identity_tenancy" "oci_tenancy" {
-  tenancy_id = var.tenancy_ocid
+  tenancy_id = "${var.tenancy_ocid}"
 }
 
 # OCI Services
@@ -44,5 +46,5 @@ data "oci_identity_regions" "oci_regions" {
 }
 
 data "oci_objectstorage_namespace" "os_namespace" {
-  compartment_id = var.tenancy_ocid
+  compartment_id = "${var.tenancy_ocid}"
 }
