@@ -13,7 +13,7 @@ def handler(ctx, data: io.BytesIO=None):
         object_storage = oci.object_storage.ObjectStorageClient(config, signer=signer)
         namespace = object_storage.get_namespace().data
         # update with your bucket name
-        bucket_name = "demo"
+        bucket_name = "gb-cloud-resume"
         file_object_name = ctx.RequestURL()
         if file_object_name.endswith("/"):
             logging.getLogger().info("Adding index.html to request URL " + file_object_name)
