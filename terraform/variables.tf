@@ -26,6 +26,12 @@ variable "compartment_ocid" {
   description = "OCID for the cloud-resume-challenge compartment"
 }
 
+variable "container_registry_name" {
+  type        = string
+  default     = "cloud-resume-challenge/functions"
+  description = "Name of the OCI Container Registry"
+}
+
 variable "domain_name" {
   type        = string
   default     = "grahambaggett.net"
