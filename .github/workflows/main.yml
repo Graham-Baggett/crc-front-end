@@ -102,11 +102,10 @@ jobs:
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
       - name: Download repo
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-      - name: Check Directory
-        env:
-          WORKING_DIRECTORY: ./functions/website-display
+      - name: Build Function
         run: |
-          ls -la 
+          cd functions/website-display
+          fn build --verbose
           
 #       - name: Change file timestamps to last modification date
 #         run: |
