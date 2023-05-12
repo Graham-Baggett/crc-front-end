@@ -1,6 +1,7 @@
-resource "oci_functions_applications" "cloud_resume_application_application" {
+resource "oci_functions_application" "cloud_resume_application_application" {
   compartment_id = var.compartment_ocid
   display_name   = "${var.application_name}"
+  subnet_ids     = "TBD"
 }
 
 ### Repository in the Container Image Registry for the container images underpinning the function 
