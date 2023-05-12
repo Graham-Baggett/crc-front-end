@@ -106,10 +106,8 @@ jobs:
         run: |
           cd functions/website-display
           fn build --verbose
-      - name: Tag Container
-        run: docker images
-        #run: docker images | grep website-display | awk -F ' ' '{print $3}'
-        #run: image=$(docker images | grep website-display | awk -F ' ' '{print $3}') ; docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
+      - name: Push Container into Registry
+        run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
           
 #       - name: Change file timestamps to last modification date
 #         run: |
