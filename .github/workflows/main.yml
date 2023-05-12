@@ -28,7 +28,6 @@ jobs:
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "Cloud Resume Challenge Stack"
       TF_VERSION: "1.2.x"
-      TF_VAR_tenancy_ocid: ${{ secrets.OCI_CLI_TENANCY }}
       WORKING_DIRECTORY: ./terraform
     #permissions:
     #  id-token: write # This is required for requesting the JWT
