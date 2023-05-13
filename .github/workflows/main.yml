@@ -56,6 +56,11 @@ jobs:
       - name: Check OCI Resource Stack
         run: |
           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+
+      - name: Update Stack
+        run: |
+          oci resource-manager stack update --stack-id $stack_id --variables {“tenancy_ocid”: ${{ secrets.OCI_CLI_TENANCY }} }
+
 #      - name: Create Configuration Source Provider
 #         if: ${{env.SOURCE_PROVIDER_ID == ''}}
 #         run: |
