@@ -1,4 +1,5 @@
 provider "oci" {
   # Configuration options
-  region = var.region
+  region        = var.region
+  tenancy_ocid  = var.tenancy_ocid
 }
