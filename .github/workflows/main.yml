@@ -59,7 +59,7 @@ jobs:
 
       - name: Update Stack
         run: |
-          oci resource-manager stack update --stack-id $STACK_ID --variables '{“tenancy_ocid”: "${{ secrets.OCI_CLI_TENANCY }}" }' --force
+          oci resource-manager stack update --stack-id $STACK_ID --variables '{"tenancy_ocid": "${{ secrets.OCI_CLI_TENANCY }}" }' --force
 
 #      - name: Create Configuration Source Provider
 #         if: ${{env.SOURCE_PROVIDER_ID == ''}}
