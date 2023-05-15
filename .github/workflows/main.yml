@@ -103,7 +103,7 @@ jobs:
           fn build --verbose
       - name: Deploy Function
         run: |
-          ls -la
+          cd functions/website-display
           fn deploy --app cloud-resume-challenge-app
 #       - name: Tag Container
 #         run: |
