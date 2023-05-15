@@ -40,11 +40,11 @@ jobs:
           disable-sudo: false
           egress-policy: audit
           
-      - name: Install OCI and run a command
-        uses: oracle-actions/run-oci-cli-command@v1.1.1
-        id: list-bucket-contents
-        with:
-           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+#       - name: Install OCI and run a command
+#         uses: oracle-actions/run-oci-cli-command@v1.1.1
+#         id: list-bucket-contents
+#         with:
+#            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
 
 #         id: find-compartment-id
 #         with:
@@ -101,17 +101,13 @@ jobs:
         run: |
           cd functions/website-display
           fn build --verbose
-      - name: List Applications
+      - name: Tag Container
         run: |
-          cd functions/website-display
-          fn list apps
-#       - name: Tag Container
-#         run: |
-#           image=$(docker images | grep get_website | awk -F ' ' '{print $3}') ;
-#           docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
-#           docker images | grep get_website
-#       - name: Push Container into Registry
-#         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
+          image=$(docker images | grep get_website | awk -F ' ' '{print $3}') ;
+          docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
+          docker images | grep get_website
+      - name: Push Container into Registry
+        run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
 #       - name: Create Cloud Resume Challenge Plan Job
 #         if: ${{env.STACK_ID != ''}}
 #         run: |
