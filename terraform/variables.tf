@@ -121,7 +121,6 @@ variable "public_subnet_cidr_block" {
 
 variable "region" {
   type        = string
-  default     = "us-ashburn-1"
   description = "OCI region"
 }
 
