@@ -108,6 +108,8 @@ jobs:
           docker images | grep get_website
       - name: Push Container into Registry
         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
+      - name: Pull Container
+        run: docker pull ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.FUNCTION_NAME }}:0.0.1
 #       - name: Create Cloud Resume Challenge Plan Job
 #         if: ${{env.STACK_ID != ''}}
 #         run: |
