@@ -123,8 +123,10 @@ variable "logdefinition" {
 }
 
 variable "loggroup" {
-  type = string
-  default = "funcloggroup"
+  type = map(string)
+  default = {
+    loggroup = "funcloggroup"
+  }
 }
 
 variable "private_subnet_cidr_block" {
