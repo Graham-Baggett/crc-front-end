@@ -114,7 +114,7 @@ variable "log_retention_duration" {
 }
 
 variable "logdefinition" {
-  type = map(string)
+  type = map(any)
   default = {
     loggroup = "funcloggroup"
     service = "functions"
@@ -123,10 +123,8 @@ variable "logdefinition" {
 }
 
 variable "loggroup" {
-  type = map(string)
-  default = {
-    loggroup = "funcloggroup"
-  }
+  type = map(any)
+  description = "Log Group"
 }
 
 variable "private_subnet_cidr_block" {
