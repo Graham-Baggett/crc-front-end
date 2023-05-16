@@ -20,10 +20,10 @@ resource "oci_functions_function" "website_function" {
   memory_in_mbs  = "128"
 }
 
-resource "oci_logging_log_group" "test_log_group" {
+resource "oci_logging_log_group" "crc_log_group" {
     #Required
     compartment_id = var.compartment_ocid
-    display_name = "Log Group"
+    display_name = "website-function-log-group"
 }
 
 # module "logging_function" {
