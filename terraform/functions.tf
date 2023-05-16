@@ -26,6 +26,30 @@ resource "oci_logging_log_group" "crc_log_group" {
     display_name = "website-function-log-group"
 }
 
+resource "oci_logging_log" "crc_log" {
+    #Required
+    display_name = "website-function-log"
+    log_group_id = oci_logging_log_group.crc_log_group.id
+    log_type = "SERVICE"
+
+    #Optional
+    configuration {
+        #Required
+        source {
+            #Required
+            category = "invoke"
+            resource = oci_functions_application.cloud_resume_challenge_application.id
+            service = "functions"
+            source_type = "OCISERVICE"
+        }
+
+        #Optional
+        compartment_id = var.compartment_ocid
+    }
+
+    retention_duration = var.log_retention_duration
+}
+
 # module "logging_function" {
 #   source  = "oracle-terraform-modules/logging/oci//modules/function"
 #   version = "0.4.0"
