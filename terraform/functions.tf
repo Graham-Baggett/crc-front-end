@@ -25,7 +25,8 @@ module "logging_function" {
   version = "0.4.0"
   # insert the 4 required variables here
   compartment_id = var.compartment_ocid
-  loggroup = var.loggroup
-  logdefinition = var.logdefinition
+  loggroup = oci_logging_log_group.funcloggroup
+  logdefinition = local.funclogdef
+  
   log_retention_duration = var.log_retention_duration
 }
