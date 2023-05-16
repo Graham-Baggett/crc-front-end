@@ -19,3 +19,9 @@ resource "oci_functions_function" "website_function" {
   image          = "${local.ocir_docker_repository}/${local.ocir_namespace}/${local.ocir_repo_name}/${var.website_display_function_name}:0.0.1"
   memory_in_mbs  = "128"
 }
+
+module "logging_function" {
+  source  = "oracle-terraform-modules/logging/oci//modules/function"
+  version = "0.4.0"
+  # insert the 4 required variables here
+}
