@@ -20,13 +20,19 @@ resource "oci_functions_function" "website_function" {
   memory_in_mbs  = "128"
 }
 
-module "logging_function" {
-  source  = "oracle-terraform-modules/logging/oci//modules/function"
-  version = "0.4.0"
-  # insert the 4 required variables here
-  compartment_id = var.compartment_ocid
-  loggroup = oci_logging_log_group.funcloggroup
-  logdefinition = local.funclogdef
-  
-  log_retention_duration = var.log_retention_duration
+resource "oci_logging_log_group" "test_log_group" {
+    #Required
+    compartment_id = var.compartment_ocid
+    display_name = "Log Group"
 }
+
+# module "logging_function" {
+#   source  = "oracle-terraform-modules/logging/oci//modules/function"
+#   version = "0.4.0"
+#   # insert the 4 required variables here
+#   compartment_id = var.compartment_ocid
+#   loggroup = oci_logging_log_group.funcloggroup
+#   logdefinition = local.funclogdef
+  
+#   log_retention_duration = var.log_retention_duration
+# }
