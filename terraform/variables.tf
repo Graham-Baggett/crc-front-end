@@ -53,7 +53,7 @@ variable "egress_variables" {
 
 variable "function_name" {
   type        = string
-  default     = "get_website"
+  default     = "func"
   description = "Website Retrieval OCI Function Name"
 }
 
