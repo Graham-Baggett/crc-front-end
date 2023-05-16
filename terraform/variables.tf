@@ -107,6 +107,26 @@ variable "ingress_variables" {
   }
 }
 
+variable "log_retention_duration" {
+  type        = number
+  default     = 30
+  description = "Log retention duration"
+}
+
+variable "logdefinition" {
+  type = map(string)
+  default = {
+    loggroup = "funcloggroup"
+    service = "functions"
+    resource = "cloud-resume-challenge-app"
+  }
+}
+
+variable "loggroup" {
+  type = string
+  default = "funcloggroup"
+}
+
 variable "private_subnet_cidr_block" {
   type        = string
   default     = "10.0.1.0/24"
