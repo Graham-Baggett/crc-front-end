@@ -113,19 +113,19 @@ variable "log_retention_duration" {
   description = "Log retention duration"
 }
 
-variable "logdefinition" {
-  type = map(any)
-  default = {
-    loggroup = "funcloggroup"
-    service = "functions"
-    resource = "cloud-resume-challenge-app"
-  }
-}
+# variable "logdefinition" {
+#   type = map(any)
+#   default = {
+#     loggroup = "funcloggroup"
+#     service = "functions"
+#     resource = "cloud-resume-challenge-app"
+#   }
+# }
 
-variable "loggroup" {
-  type = map(any)
-  description = "Log Group"
-}
+# variable "loggroup" {
+#   type = map(any)
+#   description = "Log Group"
+# }
 
 variable "private_subnet_cidr_block" {
   type        = string
