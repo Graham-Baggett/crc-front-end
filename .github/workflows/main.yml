@@ -99,6 +99,8 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Create Context
         run: fn create context us-ashburn-1 --provider oracle
+      - name: Use Context
+        run: fn use context us-ashburn-1
       - name: List Contexts
         run: fn list contexts
 #       - name: Build Function
