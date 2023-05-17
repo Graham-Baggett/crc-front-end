@@ -101,6 +101,8 @@ jobs:
         run: fn create context us-ashburn-1 --provider oracle
       - name: Use Context
         run: fn use context us-ashburn-1
+      - name: Add Compartment to Context
+        run: fn update context oracle.compartment-id $OCI_CLI_COMPARTMENT_OCID
       - name: List Contexts
         run: fn list contexts
 #       - name: Build Function
