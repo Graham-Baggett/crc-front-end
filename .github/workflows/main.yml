@@ -97,6 +97,8 @@ jobs:
           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
       - name: Download repo
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - name: Create Context
+        run: fn create context us-ashburn-1 --provider oracle
       - name: List Contexts
         run: fn list contexts
 #       - name: Build Function
