@@ -121,14 +121,10 @@ jobs:
           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
 #       - name: List Fn Contexts
 #         run: fn list contexts
-#       - name: Check context file
-#         run: more ~/.fn/contexts/us-ashburn-1.yaml
-      - name: List Fn Apps
-        run: fn list apps
-#       - name: Deploy Fn Function
-#         run: |
-#           cd functions/website-display
-#           fn -v deploy --app cloud-resume-challenge-app
+      - name: Deploy Fn Function
+        run: |
+          cd functions/website-display
+          fn -v deploy --app cloud-resume-challenge-app
 #       - name: Build Function
 #         run: |
 #           cd functions/website-display
