@@ -107,9 +107,10 @@ jobs:
           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
       - name: List Fn Contexts
         run: fn list contexts
-      - name: Deploy Fn Function
+      - name: Build and Deploy Fn Function
         run: |
           cd functions/website-display
+          fn build --verbose
           fn -v deploy --app cloud-resume-challenge-app
 #       - name: Build Function
 #         run: |
