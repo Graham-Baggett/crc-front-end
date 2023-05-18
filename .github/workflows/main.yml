@@ -44,18 +44,17 @@ jobs:
           echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
           echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
-      - name: Check config file
-        run: more ~/.oci/config
 #         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
 #         with:
 #           disable-sudo: false
 #           egress-policy: audit
           
-#       - name: Install OCI and run a command
-#         uses: oracle-actions/run-oci-cli-command@v1.1.1
-#         id: list-bucket-contents
-#         with:
-#            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+      - name: Install OCI and run a command
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: list-bucket-contents
+        with:
+           command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
+           #command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
 
 #         id: find-compartment-id
 #         with:
