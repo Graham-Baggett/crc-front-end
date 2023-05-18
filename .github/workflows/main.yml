@@ -119,11 +119,6 @@ jobs:
           fn update context api-url ${{ secrets.OCI_API_URL }}
           fn update context registry ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}
           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
-      - name: Check home directory
-        run: |
-          cd ~
-          cd .oci-cli-installed
-          ls -la
 #       - name: List Fn Contexts
 #         run: fn list contexts
 #       - name: Check context file
