@@ -50,3 +50,9 @@ resource "oci_identity_policy" "api_gateway_fnpolicy" {
     "ALLOW any-user to use functions-family in compartment id ${var.compartment_ocid} where ALL {request.principal.type= 'ApiGateway', request.resource.compartment.id = '${var.compartment_ocid}'}"
   ]
 }
+
+resource "oci_logging_log_group" "api_log_group" {
+    #Required
+    compartment_id = var.compartment_ocid
+    display_name = "website-api-gateway-log-group"
+}
