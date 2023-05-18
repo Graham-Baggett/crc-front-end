@@ -23,6 +23,7 @@ resource "oci_apigateway_deployment" "website_api_deployment" {
       }
       execution_log {
         is_enabled = true
+        log_level = "DEBUG"
       }
     }
     
