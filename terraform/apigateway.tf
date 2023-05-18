@@ -34,6 +34,7 @@ resource "oci_apigateway_deployment" "website_api_deployment" {
         function_id = oci_functions_function.website_function.id
       }
       methods = ["GET"]
+      path = "/{url*}"
     }
   }
   
