@@ -1,3 +1,8 @@
+import io
+import oci
+import logging
+from fdk import response
+
 def handler(ctx, data: io.BytesIO=None):
     if None == ctx.RequestURL():
         return "Function loaded properly but not invoked via an HTTP request."
