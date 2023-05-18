@@ -32,18 +32,18 @@ jobs:
     #permissions:
     #  id-token: write # This is required for requesting the JWT
     steps: 
-      - name: Install Fn
-        run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
-      - name: Write Config & Key Files
-        run: |
-          mkdir ~/.oci
-          echo "[DEFAULT]" >> ~/.oci/config
-          echo "user=$OCI_CLI_USER" >> ~/.oci/config
-          echo "fingerprint=$OCI_CLI_FINGERPRINT" >> ~/.oci/config
-          echo "region=$OCI_CLI_REGION" >> ~/.oci/config
-          echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
-          echo "key_file=~/.oci/key.pem" >> ~/.oci/config
-          echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
+#       - name: Install Fn
+#         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+#       - name: Write Config & Key Files
+#         run: |
+#           mkdir ~/.oci
+#           echo "[DEFAULT]" >> ~/.oci/config
+#           echo "user=$OCI_CLI_USER" >> ~/.oci/config
+#           echo "fingerprint=$OCI_CLI_FINGERPRINT" >> ~/.oci/config
+#           echo "region=$OCI_CLI_REGION" >> ~/.oci/config
+#           echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
+#           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+#           echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
 #         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
 #         with:
 #           disable-sudo: false
@@ -53,11 +53,11 @@ jobs:
         uses: oracle-actions/run-oci-cli-command@v1.1.1
         id: list-bucket-contents
         with:
-           command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
-           #command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+           #command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
+           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
   
-      - name: Repair file permissions on key
-        run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
+#       - name: Repair file permissions on key
+#         run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
 
 ###############     MANAGE TERRAFORM STACK     ######################################
 #       - name: Check Configuration Source Provider
@@ -89,19 +89,19 @@ jobs:
         run: |
           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 
-      - name: Create Cloud Resume Challenge Stack
-        if: ${{env.STACK_ID == ''}}
-        run: |
-            echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
-            --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
-            --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
-            --config-source-branch-name $BRANCH_NAME \
-            --config-source-repository-url $REPO_URL \
-            --config-source-working-directory $WORKING_DIRECTORY \
-            --display-name "$STACK_NAME" \
-            --terraform-version $TF_VERSION \
-            --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
-            --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Create Cloud Resume Challenge Stack
+#         if: ${{env.STACK_ID == ''}}
+#         run: |
+#             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
+#             --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
+#             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
+#             --config-source-branch-name $BRANCH_NAME \
+#             --config-source-repository-url $REPO_URL \
+#             --config-source-working-directory $WORKING_DIRECTORY \
+#             --display-name "$STACK_NAME" \
+#             --terraform-version $TF_VERSION \
+#             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
+#             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
       - name: Create Cloud Resume Challenge Plan Job
         if: ${{env.STACK_ID != ''}}
         run: |
