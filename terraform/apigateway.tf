@@ -56,3 +56,27 @@ resource "oci_logging_log_group" "api_log_group" {
     compartment_id = var.compartment_ocid
     display_name = "website-api-gateway-log-group"
 }
+
+resource "oci_logging_log" "api_log" {
+    #Required
+    display_name = "website-api-gateway-log"
+    log_group_id = oci_logging_log_group.api_log_group.id
+    log_type = "SERVICE"
+
+    #Optional
+    configuration {
+        #Required
+        source {
+            #Required
+            category = "access"
+            resource = oci_apigateway_deployment.website_api_deployment.id
+            service = "apigateway"
+            source_type = "OCISERVICE"
+        }
+
+        #Optional
+        compartment_id = var.compartment_ocid
+    }
+
+    retention_duration = var.log_retention_duration
+}
