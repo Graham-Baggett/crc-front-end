@@ -6,7 +6,7 @@ output "api_gateway" {
 }
 
 output "website_api_endpoint" {
-    value = oci_apigateway_deployment.api_gateway_deployment.endpoint
+    value = oci_apigateway_deployment.website_api_deployment.endpoint
 }
 
 output "gb-cloud-resume_bucket" {
