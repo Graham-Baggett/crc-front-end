@@ -67,9 +67,9 @@ jobs:
 #         run: |
 #           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
 #           --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
-#       - name: Check OCI Resource Stack
-#         run: |
-#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+      - name: Check OCI Resource Stack
+        run: |
+          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 
 #       - name: Update Stack
 #         run: |
@@ -103,28 +103,48 @@ jobs:
 #             --terraform-version $TF_VERSION \
 #             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Login to OCIR
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
-          username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
-          password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
-      - name: Download repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-      - name: Manage Fn Context
+      - name: Create Cloud Resume Challenge Plan Job
+        if: ${{env.STACK_ID != ''}}
         run: |
-          fn create context us-ashburn-1 --provider oracle
-          fn use context us-ashburn-1
-          fn update context oracle.compartment-id $OCI_CLI_COMPARTMENT_OCID
-          fn update context api-url ${{ secrets.OCI_API_URL }}
-          fn update context registry ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}
-          fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
+          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --display-name "Terraform plan for updating OCI front-end infrastructure" \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED \
+            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Apply Cloud Resume Challenge Plan Job
+        if: ${{env.PLAN_JOB_ID != ''}}
+        run: |
+          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+            --display-name "Terraform apply for updating OCI front-end infrastructure" \
+            --execution-plan-strategy FROM_PLAN_JOB_ID \
+            --execution-plan-job-id $PLAN_JOB_ID \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+
+#       - name: Login to OCIR
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+#           username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
+#           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
+#       - name: Download repo
+#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+#       - name: Manage Fn Context
+#         run: |
+#           fn create context us-ashburn-1 --provider oracle
+#           fn use context us-ashburn-1
+#           fn update context oracle.compartment-id $OCI_CLI_COMPARTMENT_OCID
+#           fn update context api-url ${{ secrets.OCI_API_URL }}
+#           fn update context registry ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}
+#           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
 #       - name: List Fn Contexts
 #         run: fn list contexts
-      - name: Deploy Fn Function
-        run: |
-          cd functions/website-display
-          fn -v deploy --app cloud-resume-challenge-app
+#       - name: Deploy Fn Function
+#         run: |
+#           cd functions/website-display
+#           fn -v deploy --app cloud-resume-challenge-app
 #       - name: Build Function
 #         run: |
 #           cd functions/website-display
@@ -135,25 +155,6 @@ jobs:
 #           docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
 #       - name: Push Container into Registry
 #         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
-#       - name: Create Cloud Resume Challenge Plan Job
-#         if: ${{env.STACK_ID != ''}}
-#         run: |
-#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED \
-#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Apply Cloud Resume Challenge Plan Job
-#         if: ${{env.PLAN_JOB_ID != ''}}
-#         run: |
-#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
-#             --execution-plan-strategy FROM_PLAN_JOB_ID \
-#             --execution-plan-job-id $PLAN_JOB_ID \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Change file timestamps to last modification date
 #         run: |
 #           git fetch --unshallow
