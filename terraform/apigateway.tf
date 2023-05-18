@@ -7,6 +7,39 @@ resource "oci_apigateway_gateway" "website_api_gateway" {
   }
 }
 
+resource "oci_apigateway_deployment" "website_api_deployment" {
+  #Required
+  compartment_id = var.compartment_ocid
+  gateway_id = data.oci_apigateway_gateway.website_api_gateway.id
+  path_prefix = "/"
+ 
+  specification {
+    request_policies {
+    }
+
+    logging_policies {
+      access_log {
+        is_enabled = true
+      }
+      execution_log {
+        is_enabled = true
+      }
+    }
+    
+    routes {
+      #Required
+      backend {
+        #Required
+        type = "ORACLE_FUNCTIONS_BACKEND"
+        function_id = oci_functions_function.website_function.id
+      }
+      methods = ["GET"]
+    }
+  }
+  
+  display_name = "website_api_deployment"
+}
+
 resource "oci_identity_policy" "api_gateway_fnpolicy" {
   compartment_id = var.compartment_ocid
   description    = "APIGW policy for compartment to access FN"
