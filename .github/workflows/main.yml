@@ -55,6 +55,10 @@ jobs:
         with:
            command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
            #command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+  
+      - name: Repair file permissions on key
+        run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
+
 
 #         id: find-compartment-id
 #         with:
