@@ -107,8 +107,10 @@ jobs:
           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
       - name: List Fn Contexts
         run: fn list contexts
-      - name: List Fn Apps
-        run: fn list apps
+      - name: Get API URL
+        run: echo ${{secrets.OCI_API_URL}} | sed 's/./& /g'
+#       - name: List Fn Apps
+#         run: fn list apps
 #       - name: Deploy Fn Function
 #         run: |
 #           cd functions/website-display
