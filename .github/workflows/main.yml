@@ -34,16 +34,18 @@ jobs:
     steps: 
       - name: Install Fn
         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
-      - name: 'Write Config & Key Files'
+      - name: Write Config & Key Files
         run: |
           mkdir ~/.oci
           echo "[DEFAULT]" >> ~/.oci/config
           echo "user=$OCI_CLI_USER" >> ~/.oci/config
-          echo "fingerprint=OCI_CLI_FINGERPRINT" >> ~/.oci/config
-          echo "region=secrets.OCI_CLI_REGION" >> ~/.oci/config
-          echo "tenancy=secrets.OCI_CLI_TENANCY" >> ~/.oci/config
+          echo "fingerprint=$OCI_CLI_FINGERPRINT" >> ~/.oci/config
+          echo "region=$OCI_CLI_REGION" >> ~/.oci/config
+          echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
           echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
+      - name: Check config file
+        run: more ~/.oci/config
 #         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
 #         with:
 #           disable-sudo: false
