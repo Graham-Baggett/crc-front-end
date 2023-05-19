@@ -13,12 +13,12 @@ resource "oci_artifacts_container_repository" "container_repository_for_function
     is_public = false
 }
 
-# resource "oci_functions_function" "website_function" {
-#   application_id = "${local.application_id}"
-#   display_name   = "${var.function_name}"
-#   image          = "${local.ocir_docker_repository}/${local.ocir_namespace}/${local.ocir_repo_name}/${var.function_name}:0.0.1"
-#   memory_in_mbs  = "128"
-# }
+resource "oci_functions_function" "website_function" {
+  application_id = "${local.application_id}"
+  display_name   = "${var.function_name}"
+  image          = "${local.ocir_docker_repository}/${local.ocir_namespace}/${local.ocir_repo_name}/${var.function_name}:0.0.2"
+  memory_in_mbs  = "128"
+}
 
 resource "oci_logging_log_group" "crc_log_group" {
     #Required

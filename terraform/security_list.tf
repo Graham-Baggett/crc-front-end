@@ -17,9 +17,9 @@ resource "oci_core_security_list" "public_security_list" {
       # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
       protocol = "6"
       tcp_options { 
-          min = 22
-          max = 22
-      }
+          min = 443
+          max = 443
+      } #22
     }
   ingress_security_rules { 
       stateless = var.ingress_variables["stateless"]
