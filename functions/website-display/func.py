@@ -21,8 +21,8 @@ def handler(ctx, data: io.BytesIO=None):
         bucket_name = "gb-cloud-resume"
         file_object_name = ctx.RequestURL()
         if file_object_name.endswith("/"):
-            logging.getLogger().info("Adding index.html to request URL " + file_object_name)
-            file_object_name += "index.html"
+            logging.getLogger().info("Adding html/index.html to request URL " + file_object_name)
+            file_object_name += "html/index.html"
 
         # strip off the first character of the URI (i.e. the /)
         file_object_name = file_object_name[1:]
@@ -34,6 +34,6 @@ def handler(ctx, data: io.BytesIO=None):
         )
     except (Exception) as e:
         return response.Response(
-            ctx, response_data="500 Server error",
+            ctx, response_data=str(e),
             headers={"Content-Type": "text/plain"}
             )
