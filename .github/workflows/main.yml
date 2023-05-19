@@ -128,7 +128,7 @@ jobs:
           cd temp
           wget https://releases.hashicorp.com/terraform-provider-oci/4.121.0/terraform-provider-oci_4.121.0_linux_amd64.zip
           unzip terraform-provider-oci_4.121.0_linux_amd64.zip
-          ls -la
+          sudo mv terraform-provider-oci_4.121.0 /usr/local/bin
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
 #       - name: Login to OCIR
