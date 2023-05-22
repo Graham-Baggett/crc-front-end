@@ -50,12 +50,12 @@ jobs:
 #           disable-sudo: false
 #           egress-policy: audit
           
-#       - name: Install OCI and run a command
-#         uses: oracle-actions/run-oci-cli-command@v1.1.1
-#         id: list-bucket-contents
-#         with:
-#            #command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
-#            command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+      - name: Install OCI and run a command
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        id: list-bucket-contents
+        with:
+           #command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
+           command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
   
 #       - name: Repair file permissions on key
 #         run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
@@ -75,14 +75,17 @@ jobs:
 #           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
+      - name: Check OCI Resource Stack
+        run: |
+          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 #       - name: Create OCI Resource Stack
 #         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
-#       - name: Update Stack
-#         run: |
-#           oci resource-manager stack update \
-#             --stack-id $STACK_ID \
-#             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}", "tenancy_ocid": "${{ secrets.OCI_CLI_TENANCY }}"}' \
-#             --force
+      - name: Update Stack
+        run: |
+          oci resource-manager stack update \
+            --stack-id $STACK_ID \
+            --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}", "tenancy_ocid": "${{ secrets.OCI_CLI_TENANCY }}",  "certificate_ocid": "${{ secrets.OCI_CERTIFICATE_OCID }}"}' \
+            --force
 #       - name: Create Cloud Resume Challenge Stack
 #         if: ${{env.STACK_ID == ''}}
 #         run: |
@@ -97,9 +100,6 @@ jobs:
 #             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 
-#       - name: Check OCI Resource Stack
-#         run: |
-#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 
 #       - name: Create Cloud Resume Challenge Plan Job
 #         if: ${{env.STACK_ID != ''}}
