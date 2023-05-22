@@ -75,9 +75,9 @@ jobs:
 #           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
-      - name: Check OCI Resource Stack
-        run: |
-          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+#       - name: Check OCI Resource Stack
+#         run: |
+#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 #       - name: Create OCI Resource Stack
 #         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
 #       - name: Update Stack
@@ -101,25 +101,25 @@ jobs:
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 
 
-      - name: Create Cloud Resume Challenge Plan Job
-        if: ${{env.STACK_ID != ''}}
-        run: |
-          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-            --display-name "Terraform plan for updating OCI front-end infrastructure" \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED \
-            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-      - name: Apply Cloud Resume Challenge Plan Job
-        if: ${{env.PLAN_JOB_ID != ''}}
-        run: |
-          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-            --display-name "Terraform apply for updating OCI front-end infrastructure" \
-            --execution-plan-strategy FROM_PLAN_JOB_ID \
-            --execution-plan-job-id $PLAN_JOB_ID \
-            --stack-id $STACK_ID \
-            --wait-for-state SUCCEEDED \
-            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Create Cloud Resume Challenge Plan Job
+#         if: ${{env.STACK_ID != ''}}
+#         run: |
+#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED \
+#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Apply Cloud Resume Challenge Plan Job
+#         if: ${{env.PLAN_JOB_ID != ''}}
+#         run: |
+#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
+#             --execution-plan-strategy FROM_PLAN_JOB_ID \
+#             --execution-plan-job-id $PLAN_JOB_ID \
+#             --stack-id $STACK_ID \
+#             --wait-for-state SUCCEEDED \
+#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
 #       - name: Login to OCIR
@@ -156,24 +156,32 @@ jobs:
 #           docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
 #       - name: Push Container into Registry
 #         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
-#       - name: Change file timestamps to last modification date
-#         run: |
-#           git fetch --unshallow
-#           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
-#       - name: Copy files to the website bucket with the OCI CLI
-#         run: |
-#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
-#       - name: Get Configuration Source Provider Information
-#         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
-#        - name: Check OCI compartments
-#        run: oci iam compartment list
+
+
+##############  ALTERNATE DOCKER LOGIN OPTION #########################################################
 #       - name: Login to OCIR
 #         env:
 #           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
 #           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
 #         run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
 
-    
+
+############## UPDATE BUCKET FILES ####################################################################
+      - name: Change file timestamps to last modification date
+        run: |
+          git fetch --unshallow
+          for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
+      - name: Copy files to the website bucket with the OCI CLI
+        run: |
+           oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+
+
+############### MISCALLANEOUS ##########################################################################
+#       - name: Get Configuration Source Provider Information
+#         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
+#        - name: Check OCI compartments
+#        run: oci iam compartment list
+
 
 
 #   dast-scan: #performs Dynamic Application Security Testing against the target site
