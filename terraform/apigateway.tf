@@ -1,5 +1,7 @@
 resource "oci_apigateway_gateway" "website_api_gateway" {
+  certificate_id = var.certificate_ocid
   compartment_id = var.compartment_ocid
+  display_name   = "Cloud Resume Challenge Website API Gateway"
   endpoint_type  = var.endpoint_type
   subnet_id      = oci_core_subnet.public_subnet.id
   lifecycle {
@@ -10,6 +12,7 @@ resource "oci_apigateway_gateway" "website_api_gateway" {
 resource "oci_apigateway_deployment" "website_api_deployment" {
   #Required
   compartment_id = var.compartment_ocid
+  display_name = "website_api_deployment"
   gateway_id = data.oci_apigateway_gateway.website_api_gateway.id
   path_prefix = "/"
  
@@ -38,8 +41,6 @@ resource "oci_apigateway_deployment" "website_api_deployment" {
       path = "/{url*}"
     }
   }
-  
-  display_name = "website_api_deployment"
 }
 
 resource "oci_identity_policy" "api_gateway_fnpolicy" {
