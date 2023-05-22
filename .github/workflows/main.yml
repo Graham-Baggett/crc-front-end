@@ -121,19 +121,6 @@ jobs:
 #             --wait-for-state SUCCEEDED \
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 
-###############    RESOURCE DISCOVERY #############################################
-      - name: Get Terraform Provider
-        run: |
-          mkdir temp
-          cd temp
-          wget https://releases.hashicorp.com/terraform-provider-oci/4.121.0/terraform-provider-oci_4.121.0_linux_amd64.zip
-          unzip terraform-provider-oci_4.121.0_linux_amd64.zip
-          sudo mv terraform-provider-oci_v4.121.0 /usr/local/bin
-          cd /usr/local/bin/
-          sudo ln -s terraform-provider-oci_v4.121.0 tf-oci
-          cd
-          tf-oci
-
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
 #       - name: Login to OCIR
 #         uses: docker/login-action@v2
