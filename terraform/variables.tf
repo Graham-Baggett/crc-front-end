@@ -21,6 +21,11 @@ variable "bucket_namespace" {
   description = "OCI namespace"
 }
 
+variable "certificate_ocid" {
+  type        = string
+  description = "OCID for the TLS certificate"
+}
+
 variable "compartment_ocid" {
   type        = string
   description = "OCID for the cloud-resume-challenge compartment"
