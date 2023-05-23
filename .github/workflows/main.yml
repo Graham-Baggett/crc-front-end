@@ -177,7 +177,7 @@ jobs:
           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
       - name: Copy files to the website bucket with the OCI CLI
         run: |
-           oci os object sync -bn gb-cloud-resume --src-dir . --include='*resume.html' #--include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+           oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --content-type='text/html' #--include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
 
 
 ############### MISCALLANEOUS ##########################################################################
