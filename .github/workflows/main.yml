@@ -171,10 +171,10 @@ jobs:
 
 
 ############## UPDATE BUCKET FILES ####################################################################
-#       - name: Change file timestamps to last modification date
-#         run: |
-#           git fetch --unshallow
-#           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
+      - name: Change file timestamps to last modification date
+        run: |
+          git fetch --unshallow
+          for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
       - name: Copy files to the website bucket with the OCI CLI
         run: |
            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --content-type='text/html'
