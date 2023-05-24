@@ -78,8 +78,6 @@ jobs:
 #       - name: Check OCI Resource Stack
 #         run: |
 #           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
-#       - name: Create OCI Resource Stack
-#         run: oci resource-manager stack create-from-git-provider --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID --terraform-version $TF_VERSION
 #       - name: Update Stack
 #         run: |
 #           oci resource-manager stack update \
