@@ -24,7 +24,7 @@ jobs:
       OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
       BRANCH_NAME: "oci"
       BUCKET_NAME: "gb-cloud-resume"
-      PROVIDER_NAME: "GitHub Source Provider (Front-End)"
+      PROVIDER_NAME: "GitHub Source Provider"
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "Cloud Resume Challenge Stack"
       TF_VERSION: "1.2.x"
