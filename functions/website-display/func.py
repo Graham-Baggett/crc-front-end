@@ -15,7 +15,8 @@ def handler(ctx, data: io.BytesIO=None):
         "region": "us-ashburn-1"
     }
     try:
-        object_storage = oci.object_storage.ObjectStorageClient(config, signer=signer)
+        # object_storage = oci.object_storage.ObjectStorageClient(config, signer=signer)
+        object_storage = oci.object_storage.ObjectStorageClient({}, signer=signer)
         namespace = object_storage.get_namespace().data
         # update with your bucket name
         bucket_name = "gb-cloud-resume"
