@@ -141,7 +141,7 @@ jobs:
       - name: Check INSTANCE_OCID variable
         if: ${{env.INSTANCE_OCID != ''}}
         run: |
-          echo: "INSTANCE_OCID is non-null"
+          echo "INSTANCE_OCID is non-null"
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
