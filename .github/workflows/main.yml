@@ -144,7 +144,7 @@ jobs:
             --instance-id $INSTANCE_OCID \
             --query 'data [0]."public-ip"' \
             --raw-output \
-          )"
+          )" >> $GITHUB_ENV
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
