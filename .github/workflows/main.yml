@@ -136,12 +136,15 @@ jobs:
             --query "data [0].id" \
             --raw-output \
           )" >> $GITHUB_ENV
-          echo ${{env.INSTANCE_OCID}}
           
-      - name: Check INSTANCE_OCID variable
-        if: ${{env.INSTANCE_OCID != ''}}
+      - name: Get Instance IP Address
+        if: $INSTANCE_OCID != ''
         run: |
-          echo "INSTANCE_OCID is non-null"
+          echo "INSTANCE_IP_ADDRESS=$(oci compute instance list-vnics \
+            --instance-id $INSTANCE_OCID |
+            --query 'data [0]."public-ip"' \
+            --raw-output \
+          )"
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
