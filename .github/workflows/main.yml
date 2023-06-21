@@ -141,7 +141,7 @@ jobs:
         if: ${{env.INSTANCE_OCID != ''}}
         run: |
           echo "INSTANCE_IP_ADDRESS=$(oci compute instance list-vnics \
-            --instance-id $INSTANCE_OCID |
+            --instance-id $INSTANCE_OCID \
             --query 'data [0]."public-ip"' \
             --raw-output \
           )"
