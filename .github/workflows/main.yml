@@ -28,6 +28,7 @@ jobs:
       REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
       STACK_NAME: "Cloud Resume Challenge Front-End Stack"
       TF_VERSION: "1.2.x"
+      VM_INSTANCE_NAME: "free_instance1"
       WORKING_DIRECTORY: ./terraform
     #permissions:
     #  id-token: write # This is required for requesting the JWT
@@ -124,6 +125,20 @@ jobs:
 #       - name: Download repo
 #         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
+
+###############     MANAGE VM INSTANCE     ######################################
+      - name: 'Check Existing Instance'
+        run: |
+          echo "::set-env name=INSTANCE_OCID::$( \
+            oci compute instance list \
+            --lifecycle-state RUNNING \
+            --compartment-id $OCI_CLI_COMPARTMENT_OCID \
+            --display-name $VM_INSTANCE_NAME \
+            --query "data [0].id" \
+            --raw-output \
+          )"
+          INSTANCE_STRING = "Instance OCID: ${{env.INSTANCE_OCID}}"
+          echo "${INSTANCE_STRING}"
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
