@@ -123,8 +123,8 @@ jobs:
 #             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 
 ###############     DOWNLOAD REPO FILES TO SERVER           #####################################
-#       - name: Download repo
-#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - name: Download repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
 
 ###############     MANAGE VM INSTANCE     ######################################
