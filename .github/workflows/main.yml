@@ -147,13 +147,6 @@ jobs:
             --raw-output \
           )" >> $GITHUB_ENV
           
-      - name: 'Wait for SSH'
-        run: |
-          while ! nc -w5 -z ${{ env.INSTANCE_IP_ADDRESS }} 22; do
-            sleep 5
-            echo "SSH not available..."
-            done; echo "SSH ready!"
-          
       - name: Push front-end files
         uses: appleboy/scp-action@master
         with:
@@ -162,6 +155,7 @@ jobs:
           key: ${{ env.VM_SSH_PRIVATE_KEY }}
           source: "html/*.html"
           target: "/home/opc/html"
+          strip_components: 1
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
