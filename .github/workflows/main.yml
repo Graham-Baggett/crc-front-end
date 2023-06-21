@@ -127,7 +127,7 @@ jobs:
 
 
 ###############     MANAGE VM INSTANCE     ######################################
-      - name: 'Check Existing Instance'
+      - name: Check Existing Instance
         run: |
           echo "INSTANCE_OCID=$(oci compute instance list \
             --lifecycle-state RUNNING \
@@ -137,6 +137,11 @@ jobs:
             --raw-output \
           )" >> $GITHUB_ENV
           echo ${{env.INSTANCE_OCID}}
+          
+      - name: Check INSTANCE_OCID variable
+        if: ${{env.INSTANCE_OCID != ''}}
+        run: |
+          echo: "INSTANCE_OCID is non-null"
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
