@@ -29,6 +29,7 @@ jobs:
       STACK_NAME: "Cloud Resume Challenge Front-End Stack"
       TF_VERSION: "1.2.x"
       VM_INSTANCE_NAME: "free_instance1"
+      VM_SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_PRIVATE_KEY }}
       WORKING_DIRECTORY: ./terraform
     #permissions:
     #  id-token: write # This is required for requesting the JWT
@@ -145,6 +146,15 @@ jobs:
             --query 'data [0]."public-ip"' \
             --raw-output \
           )" >> $GITHUB_ENV
+          
+      - name: Push front-end files
+        uses: appleboy/scp-action@master
+        with:
+          host: $INSTANCE_IP_ADDRESS
+          username: opc
+          key: $VM_SSH_PRIVATE_KEY
+          source: "html/*.html"
+          target: "/home/opc/html"
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
