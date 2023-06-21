@@ -136,8 +136,7 @@ jobs:
             --query "data [0].id" \
             --raw-output \
           )" >> $GITHUB_ENV
-          INSTANCE_STRING = "Instance OCID: ${{env.INSTANCE_OCID}}"
-          echo "${INSTANCE_STRING}"
+          echo ${{env.INSTANCE_OCID}}
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
