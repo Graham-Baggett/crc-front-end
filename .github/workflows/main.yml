@@ -147,12 +147,19 @@ jobs:
             --raw-output \
           )" >> $GITHUB_ENV
           
+      - name: 'Wait for SSH'
+        run: |
+          while ! nc -w5 -z ${{ env.INSTANCE_IP_ADDRESS }} 22; do
+            sleep 5
+            echo "SSH not available..."
+            done; echo "SSH ready!"
+          
       - name: Push front-end files
         uses: appleboy/scp-action@master
         with:
-          host: $INSTANCE_IP_ADDRESS
+          host: ${{ env.INSTANCE_IP_ADDRESS }}
           username: opc
-          key: $VM_SSH_PRIVATE_KEY
+          key: ${{ env.VM_SSH_PRIVATE_KEY }}
           source: "html/*.html"
           target: "/home/opc/html"
 
