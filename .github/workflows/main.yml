@@ -153,8 +153,8 @@ jobs:
           host: ${{ env.INSTANCE_IP_ADDRESS }}
           username: opc
           key: ${{ env.VM_SSH_PRIVATE_KEY }}
-          source: "html/*.html"
-          target: "/home/opc/html"
+          source: "css/*.css"
+          target: "/home/opc/css"
           strip_components: 1
 
 
