@@ -7,10 +7,10 @@ locals {
   application_id = data.oci_functions_applications.crc_function_applications.applications[0].id
 }
 
-data "oci_apigateway_gateway" "website_api_gateway" {
-    #Required
-    gateway_id = oci_apigateway_gateway.website_api_gateway.id
-}
+#data "oci_apigateway_gateway" "website_api_gateway" {
+#    #Required
+#    gateway_id = oci_apigateway_gateway.website_api_gateway.id
+#}
 
 # Gets home and current regions
 data "oci_identity_tenancy" "tenant_details" {
