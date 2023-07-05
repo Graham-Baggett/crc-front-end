@@ -78,9 +78,9 @@ jobs:
 #           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
 #       - name: Learn valid Terraform versions
 #         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
-#       - name: Check OCI Resource Stack
-#         run: |
-#           echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+      - name: Check OCI Resource Stack
+        run: |
+          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
 #       - name: Update Stack
 #         run: |
 #           oci resource-manager stack update \
@@ -102,60 +102,60 @@ jobs:
 #             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
 
 
-#       - name: Create Cloud Resume Challenge Plan Job
-#         if: ${{env.STACK_ID != ''}}
-#         run: |
-#           echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
-#             --display-name "Terraform plan for updating OCI front-end infrastructure" \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED \
-#             --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
-#       - name: Apply Cloud Resume Challenge Plan Job
-#         if: ${{env.PLAN_JOB_ID != ''}}
-#         run: |
-#           echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
-#             --display-name "Terraform apply for updating OCI front-end infrastructure" \
-#             --execution-plan-strategy FROM_PLAN_JOB_ID \
-#             --execution-plan-job-id $PLAN_JOB_ID \
-#             --stack-id $STACK_ID \
-#             --wait-for-state SUCCEEDED \
-#             --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Create Cloud Resume Challenge Plan Job
+        if: ${{env.STACK_ID != ''}}
+        run: |
+          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --display-name "Terraform plan for updating OCI front-end infrastructure" \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED \
+            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Apply Cloud Resume Challenge Plan Job
+        if: ${{env.PLAN_JOB_ID != ''}}
+        run: |
+          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+            --display-name "Terraform apply for updating OCI front-end infrastructure" \
+            --execution-plan-strategy FROM_PLAN_JOB_ID \
+            --execution-plan-job-id $PLAN_JOB_ID \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
 
 ###############     DOWNLOAD REPO FILES TO SERVER           #####################################
-      - name: Download repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+#       - name: Download repo
+#         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
 
 ###############     MANAGE VM INSTANCE     ######################################
-      - name: Check Existing Instance
-        run: |
-          echo "INSTANCE_OCID=$(oci compute instance list \
-            --lifecycle-state RUNNING \
-            --compartment-id $OCI_CLI_COMPARTMENT_OCID \
-            --display-name $VM_INSTANCE_NAME \
-            --query "data [0].id" \
-            --raw-output \
-          )" >> $GITHUB_ENV
+#       - name: Check Existing Instance
+#         run: |
+#           echo "INSTANCE_OCID=$(oci compute instance list \
+#             --lifecycle-state RUNNING \
+#             --compartment-id $OCI_CLI_COMPARTMENT_OCID \
+#             --display-name $VM_INSTANCE_NAME \
+#             --query "data [0].id" \
+#             --raw-output \
+#           )" >> $GITHUB_ENV
           
-      - name: Get Instance IP Address
-        if: ${{env.INSTANCE_OCID != ''}}
-        run: |
-          echo "INSTANCE_IP_ADDRESS=$(oci compute instance list-vnics \
-            --instance-id $INSTANCE_OCID \
-            --query 'data [0]."public-ip"' \
-            --raw-output \
-          )" >> $GITHUB_ENV
+#       - name: Get Instance IP Address
+#         if: ${{env.INSTANCE_OCID != ''}}
+#         run: |
+#           echo "INSTANCE_IP_ADDRESS=$(oci compute instance list-vnics \
+#             --instance-id $INSTANCE_OCID \
+#             --query 'data [0]."public-ip"' \
+#             --raw-output \
+#           )" >> $GITHUB_ENV
           
-      - name: Push front-end files
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ env.INSTANCE_IP_ADDRESS }}
-          username: opc
-          key: ${{ env.VM_SSH_PRIVATE_KEY }}
-          source: "css/*.css"
-          target: "/home/opc/css"
-          strip_components: 1
+#       - name: Push front-end files
+#         uses: appleboy/scp-action@master
+#         with:
+#           host: ${{ env.INSTANCE_IP_ADDRESS }}
+#           username: opc
+#           key: ${{ env.VM_SSH_PRIVATE_KEY }}
+#           source: "css/*.css"
+#           target: "/home/opc/css"
+#           strip_components: 1
 
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
