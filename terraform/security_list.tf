@@ -10,17 +10,17 @@ resource "oci_core_security_list" "public_security_list" {
       protocol = "all" 
   }
 
-#  ingress_security_rules { 
-#      stateless = var.ingress_variables["stateless"]
-#      source = "0.0.0.0/0"
-#      source_type = var.ingress_variables["source_type"]
-#      # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
-#      protocol = "6"
-#      tcp_options { 
-#          min = 80
-#          max = 80
-#      }
-#    }
+  ingress_security_rules { 
+      stateless = var.ingress_variables["stateless"]
+      source = "0.0.0.0/0"
+      source_type = var.ingress_variables["source_type"]
+      # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
+      protocol = "6"
+      tcp_options { 
+          min = 80
+          max = 80
+      }
+  }
   
   ingress_security_rules { 
       stateless = var.ingress_variables["stateless"]
@@ -32,18 +32,18 @@ resource "oci_core_security_list" "public_security_list" {
           min = 443
           max = 443
       }
-    }
+  }
   
   ingress_security_rules { 
-    stateless = var.ingress_variables["stateless"]
-    source = "0.0.0.0/0"
-    source_type = var.ingress_variables["source_type"]
-    # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
-    protocol = "6"
-    tcp_options { 
-        min = 22
-        max = 22
-    } 
+      stateless = var.ingress_variables["stateless"]
+      source = "0.0.0.0/0"
+      source_type = var.ingress_variables["source_type"]
+      # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
+      protocol = "6"
+      tcp_options { 
+          min = 22
+          max = 22
+      } 
   }
   
   ingress_security_rules { 
@@ -55,10 +55,10 @@ resource "oci_core_security_list" "public_security_list" {
   
       # For ICMP type and code see: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
       icmp_options {
-        type = 3
-        code = 4
+          type = 3
+          code = 4
       } 
-    }   
+  }   
   
   ingress_security_rules { 
       stateless = var.ingress_variables["stateless"]
@@ -69,9 +69,9 @@ resource "oci_core_security_list" "public_security_list" {
   
       # For ICMP type and code see: https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
       icmp_options {
-        type = 3
+          type = 3
       } 
-    }
+  }
 }
 
 resource "oci_core_security_list" "private_security_list" {
