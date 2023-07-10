@@ -110,7 +110,7 @@ jobs:
             --stack-id $STACK_ID \
             --wait-for-state SUCCEEDED \
             --wait-for-state FAILED \
-            --max-wait-seconds 45 | jq '.data.id' -r)" >> $GITHUB_ENV
+            --max-wait-seconds 300 | jq '.data.id' -r)" >> $GITHUB_ENV
       - name: Apply Cloud Resume Challenge Plan Job
         if: ${{env.PLAN_JOB_ID != ''}}
         run: |
