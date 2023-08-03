@@ -1,7 +1,7 @@
 {
-  "terminal.integrated.defaultProfile.windows": "PowerShell",  
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.profiles.windows": {
-    "PowerShell":{
+    "PowerShell": {
       "source": "PowerShell",
       "args": [
         "-ExecutionPolicy",
@@ -9,7 +9,11 @@
         "-NoExit",
         "-Command",
         "& conda activate sam"
-        ]
+      ]
     }
   },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none"
 }
