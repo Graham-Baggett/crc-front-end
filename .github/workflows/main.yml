@@ -56,13 +56,13 @@ jobs:
             pypi.org:443
             resourcemanager.us-ashburn-1.oraclecloud.com:443
           
-#       - name: Install OCI and run a command
-#         uses: oracle-actions/run-oci-cli-command@v1.1.1
+      - name: Install OCI and run a command
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
         #id: list-bucket-contents
 #         id: repair-file-permissions
-#         with:
-#           command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
-          #command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+        with:
+#          command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
+          command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
   
 #       - name: Repair file permissions on key
 #         run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
