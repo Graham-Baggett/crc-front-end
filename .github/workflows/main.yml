@@ -56,6 +56,7 @@ jobs:
             pypi.org:443
             objectstorage.us-ashburn-1.oraclecloud.com:443
             resourcemanager.us-ashburn-1.oraclecloud.com:443
+            github.com:443
           
       - name: Install OCI and run a command
         uses: oracle-actions/run-oci-cli-command@v1.1.1
