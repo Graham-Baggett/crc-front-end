@@ -34,17 +34,17 @@ resource "oci_core_security_list" "public_security_list" {
       }
   }
 
-#  ingress_security_rules { 
-#      stateless = var.ingress_variables["stateless"]
-#      source = "0.0.0.0/0"
-#      source_type = var.ingress_variables["source_type"]
-#      # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
-#      protocol = "6"
-#      tcp_options { 
-#          min = 5000
-#          max = 5000
-#      }
-#  }
+  ingress_security_rules { 
+      stateless = var.ingress_variables["stateless"]
+      source = "0.0.0.0/0"
+      source_type = var.ingress_variables["source_type"]
+      # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
+      protocol = "6"
+      tcp_options { 
+          min = 8000
+          max = 8000
+      }
+  }
 
   ingress_security_rules { 
       stateless = var.ingress_variables["stateless"]
