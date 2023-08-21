@@ -41,8 +41,8 @@ resource "oci_core_security_list" "public_security_list" {
       # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
       protocol = "6"
       tcp_options { 
-          min = 8000
-          max = 8000
+          min = 8080
+          max = 8080
       }
   }
 
@@ -53,8 +53,8 @@ resource "oci_core_security_list" "public_security_list" {
       # Get protocol numbers from https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml TCP is 6
       protocol = "6"
       tcp_options { 
-          min = 8080
-          max = 8080
+          min = 8443
+          max = 8443
       }
   }
   
