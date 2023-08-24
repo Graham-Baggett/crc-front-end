@@ -15,5 +15,9 @@ COPY img/* /usr/local/apache2/htdocs/img/
 # Expose port 443 for the Apache server (HTTPS)
 EXPOSE 443
 
+# Install nano during Docker image build
+RUN apt-get update && \
+    apt-get install -y nano
+
 # Start Apache in the foreground
 CMD ["httpd-foreground"]
