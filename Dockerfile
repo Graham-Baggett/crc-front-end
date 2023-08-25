@@ -28,7 +28,20 @@ RUN sed -i 's~#LoadModule ssl_module~LoadModule ssl_module~' /usr/local/apache2/
 # Uncomment httpd-ssl.conf
 #RUN sed -i 's~#Include conf/extra/httpd-ssl.conf~Include conf/extra/httpd-ssl.conf~' /usr/local/apache2/conf/httpd.conf
 
-RUN sed -i 's~#Listen 80~Listen 8080~' /usr/local/apache2/conf/httpd.conf
+# Replace Listen 80 with Listen 8080
+RUN sed -i 's~Listen 80~Listen 8080~' /usr/local/apache2/conf/httpd.conf
+
+# Add VirtualHost configuration
+RUN echo "<VirtualHost *:8080>" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "    DocumentRoot \"/usr/local/apache2/htdocs\"" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "    ServerName grahambaggett.net" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "    <Directory \"/usr/local/apache2/htdocs\">" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "        Options Indexes FollowSymLinks" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "        AllowOverride None" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "        Require all granted" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "    </Directory>" >> /usr/local/apache2/conf/httpd.conf
+RUN echo "</VirtualHost>" >> /usr/local/apache2/conf/httpd.conf
 
 # Start Apache in the foreground
 CMD ["httpd-foreground"]
