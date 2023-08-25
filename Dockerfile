@@ -19,5 +19,16 @@ EXPOSE 443
 RUN apt-get update && \
     apt-get install -y nano
 
+# Uncomment socache_shmcb_module
+RUN sed -i 's~#LoadModule socache_shmcb_module~LoadModule socache_shmcb_module~' /usr/local/apache2/conf/httpd.conf
+
+# Uncomment socache_shmcb_module
+RUN sed -i 's~#LoadModule ssl_module~LoadModule ssl_module~' /usr/local/apache2/conf/httpd.conf
+
+# Uncomment httpd-ssl.conf
+RUN sed -i 's~#Include conf/extra/httpd-ssl.conf~Include conf/extra/httpd-ssl.conf~' /usr/local/apache2/conf/httpd.conf
+
+RUN sed -i 's~#Listen 80~Listen 8080~' /usr/local/apache2/conf/httpd.conf
+
 # Start Apache in the foreground
 CMD ["httpd-foreground"]
