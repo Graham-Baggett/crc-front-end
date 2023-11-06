@@ -1,95 +1,252 @@
-name: Update AWS Environment
-run-name: ${{ github.actor }} is updating the AWS environment in GitHub Actions 🚀
+name: Interact with OCI Environment
+run-name: ${{ github.actor }} is interacting with OCI in GitHub Actions 🚀
 
 on: 
   push:
     branches:
-      - main
+      - oci
 
 permissions:
   contents: read
 
 jobs:
-  update-infra-and-sync-site: #updates AWS infrastructure and syncs S3 bucket changes
+  update-infra-and-sync-site: #updates OCI infrastructure and syncs bucket changes
     runs-on: ubuntu-latest
     environment:
       name: production
     env:
-      working_directory: ./terraform
-    permissions:
-      id-token: write # This is required for requesting the JWT
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }} #The OCID of the user
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }} #The OCID of the tenancy
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+      OCI_CLI_NAMESPACE: ${{ secrets.OCI_CLI_NAMESPACE }}
+      OCI_CLI_COMPARTMENT_OCID: ${{ secrets.OCI_CLI_COMPARTMENT_OCID }}
+      BRANCH_NAME: "oci"
+      BUCKET_NAME: "gb-cloud-resume"
+      PROVIDER_NAME: "GitHub Source Provider"
+      REPO_URL: "https://github.com/Graham-Baggett/crc-front-end"
+      STACK_NAME: "Cloud Resume Challenge Front-End Stack"
+      TF_VERSION: "1.2.x"
+      VM_INSTANCE_NAME: "free_instance1"
+      VM_SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+      WORKING_DIRECTORY: ./terraform
+    #permissions:
+    #  id-token: write # This is required for requesting the JWT
     steps: 
+#       - name: Install Fn
+#         run: curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+#       - name: Write Config & Key Files
+#         run: |
+#           mkdir ~/.oci
+#           echo "[DEFAULT]" >> ~/.oci/config
+#           echo "user=$OCI_CLI_USER" >> ~/.oci/config
+#           echo "fingerprint=$OCI_CLI_FINGERPRINT" >> ~/.oci/config
+#           echo "region=$OCI_CLI_REGION" >> ~/.oci/config
+#           echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
+#           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+#           echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
       - name: Harden Runner
         uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
         with:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
-            acm.us-east-1.amazonaws.com:443
-            checkpoint-api.hashicorp.com:443
-            cloudfront.amazonaws.com:443
-            dynamodb.us-east-1.amazonaws.com:443
-            gb-cloud-resume.s3.amazonaws.com:443
-            gb-cloud-resume.s3.us-east-1.amazonaws.com:443
-            gb-crc-terraform-state.s3.amazonaws.com:443
+            files.pythonhosted.org:443
+            pypi.org:443
+            objectstorage.us-ashburn-1.oraclecloud.com:443
+            resourcemanager.us-ashburn-1.oraclecloud.com:443
             github.com:443
-            registry.terraform.io:443
-            releases.hashicorp.com:443
-            route53.amazonaws.com:443
-            s3.amazonaws.com:443
-            sts.amazonaws.com:443
-            sts.us-east-1.amazonaws.com:443
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+          
+      - name: Install OCI and run a command
+        uses: oracle-actions/run-oci-cli-command@v1.1.1
+        #id: list-bucket-contents
+#         id: repair-file-permissions
         with:
-          aws-region: us-east-1
-          role-to-assume: ${{ secrets.WRITE_ROLE }}
-          role-session-name: OIDCSession
-      - name: Download repo
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
-#       - name: Build SAM template for deployment 
-#         run: sam build
-#       - name: Deploy SAM template to AWS
-#         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --debug
-#       - name: Check deployment status
-#         run: aws cloudformation describe-stacks --stack-name cloud-resume-challenge || exit 1
-      - name: Copy files to the production website with the AWS CLI
-        run: |
-          aws s3 sync . s3://gb-cloud-resume --size-only --exclude='*' --include='*.html' --include='*.css' --include='*.js' --include='*.png' --include='*.ico' --include='*.webmanifest'
+#          command: 'oci setup repair-file-permissions --file /home/runner/.oci/config'
+          command: 'os object list --bucket-name ${{env.BUCKET_NAME}}'
+  
+#       - name: Repair file permissions on key
+#         run: oci setup repair-file-permissions --file /home/runner/.oci/key.pem
 
-      - name: Terraform init, plan and apply
-        working-directory: ${{ env.working_directory }}
+###############     MANAGE TERRAFORM STACK     ######################################
+      # - name: Check Configuration Source Provider
+      #   run: |
+      #     echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider list \
+      #     --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} | jq '.data.items[] | select(."display-name"==env.PROVIDER_NAME).id' -r)" >> $GITHUB_ENV
+#      - name: Create Configuration Source Provider
+#         if: ${{env.SOURCE_PROVIDER_ID == ''}}
+#         run: |
+#           echo "SOURCE_PROVIDER_ID=$(oci resource-manager configuration-source-provider create-github-access-token-provider \
+#           --access-token ${{secrets.CRC_FRONT_END_TOKEN}} \
+#           --api-endpoint https://github.com/ \
+#           --display-name "$PROVIDER_NAME" \
+#           --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data.id' -r)" >> $GITHUB_ENV
+#       - name: Learn valid Terraform versions
+#         run:     oci resource-manager stack list-terraform-versions --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}}
+      - name: Check OCI Resource Stack
         run: |
-           echo `pwd`
-           terraform init -input=false
-           terraform plan
-           terraform apply -auto-approve
-#           terraform fmt -check
-#       - name: Upload Terraform state file
-#         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+          echo "STACK_ID=$(oci resource-manager stack list --all --compartment-id $OCI_CLI_COMPARTMENT_OCID | jq '.data[] | select(."display-name"==env.STACK_NAME).id' -r)" >> $GITHUB_ENV
+#       - name: Update Stack
+#         run: |
+#           oci resource-manager stack update \
+#             --stack-id $STACK_ID \
+#             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}", "tenancy_ocid": "${{ secrets.OCI_CLI_TENANCY }}",  "certificate_ocid": "${{ secrets.OCI_CERTIFICATE_OCID }}"}' \
+#             --force
+#       - name: Create Cloud Resume Challenge Stack
+#         if: ${{env.STACK_ID == ''}}
+#         run: |
+#             echo "STACK_ID=$(oci resource-manager stack create-from-git-provider \
+#             --compartment-id ${{secrets.OCI_CLI_COMPARTMENT_OCID}} \
+#             --config-source-configuration-source-provider-id $SOURCE_PROVIDER_ID \
+#             --config-source-branch-name $BRANCH_NAME \
+#             --config-source-repository-url $REPO_URL \
+#             --config-source-working-directory $WORKING_DIRECTORY \
+#             --display-name "$STACK_NAME" \
+#             --terraform-version $TF_VERSION \
+#             --variables '{"compartment_ocid": "${{env.OCI_CLI_COMPARTMENT_OCID}}", "region": "${{env.OCI_CLI_REGION}}", "bucket_namespace": "${{env.OCI_CLI_NAMESPACE}}"}' \
+#             --wait-for-state SUCCEEDED | jq '.data.id' -r)" >> $GITHUB_ENV
+
+
+      - name: Create Cloud Resume Challenge Plan Job
+        if: ${{env.STACK_ID != ''}}
+        run: |
+          echo "PLAN_JOB_ID=$(oci resource-manager job create-plan-job \
+            --display-name "Terraform plan for updating OCI front-end infrastructure" \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED \
+            --max-wait-seconds 300 | jq '.data.id' -r)" >> $GITHUB_ENV
+      - name: Apply Cloud Resume Challenge Plan Job
+        if: ${{env.PLAN_JOB_ID != ''}}
+        run: |
+          echo "APPLY_JOB_ID=$(oci resource-manager job create-apply-job \
+            --display-name "Terraform apply for updating OCI front-end infrastructure" \
+            --execution-plan-strategy FROM_PLAN_JOB_ID \
+            --execution-plan-job-id $PLAN_JOB_ID \
+            --stack-id $STACK_ID \
+            --wait-for-state SUCCEEDED \
+            --wait-for-state FAILED | jq '.data.id' -r)" >> $GITHUB_ENV
+
+###############     DOWNLOAD REPO FILES TO SERVER           #####################################
+      # - name: Download repo
+      #   uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+
+###############     MANAGE VM INSTANCE     ######################################
+#       - name: Check Existing Instance
+#         run: |
+#           echo "INSTANCE_OCID=$(oci compute instance list \
+#             --lifecycle-state RUNNING \
+#             --compartment-id $OCI_CLI_COMPARTMENT_OCID \
+#             --display-name $VM_INSTANCE_NAME \
+#             --query "data [0].id" \
+#             --raw-output \
+#           )" >> $GITHUB_ENV
+          
+#       - name: Get Instance IP Address
+#         if: ${{env.INSTANCE_OCID != ''}}
+#         run: |
+#           echo "INSTANCE_IP_ADDRESS=$(oci compute instance list-vnics \
+#             --instance-id $INSTANCE_OCID \
+#             --query 'data [0]."public-ip"' \
+#             --raw-output \
+#           )" >> $GITHUB_ENV
+          
+#       - name: Push front-end files
+#         uses: appleboy/scp-action@master
+
 #         with:
-#             name: terraform.tfstate
-#             path: ./terraform/global/s3/terraform.tfstate
+#           host: ${{ env.INSTANCE_IP_ADDRESS }}
+#           username: opc
+#           key: ${{ env.VM_SSH_PRIVATE_KEY }}
+#           source: "css/*.css"
+#           target: "/home/opc/css"
+#           strip_components: 1
 
-      
-  dast-scan: #performs Dynamic Application Security Testing against the target site
-    runs-on: ubuntu-latest
-    needs: update-infra-and-sync-site
-    container:
-      image: owasp/zap2docker-stable
-      options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
-        with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
+#       - name: Login to OCIR
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+#           username: "${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCI_CLI_USERNAME }}"
+#           password: ${{ secrets.OCI_CLI_AUTH_TOKEN }}
+#       - name: Manage Fn Context
+#         run: |
+#           fn create context us-ashburn-1 --provider oracle
+#           fn use context us-ashburn-1
+#           fn update context oracle.compartment-id $OCI_CLI_COMPARTMENT_OCID
+#           fn update context api-url ${{ secrets.OCI_API_URL }}
+#           fn update context registry ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}
+#           fn update context oracle.image-compartment-id $OCI_CLI_COMPARTMENT_OCID
+#       - name: List Fn Contexts
+#         run: fn list contexts
+#       - name: Deploy Fn Function
+#         run: |
+#           cd functions/website-display
+#           fn -v deploy --app cloud-resume-challenge-app
 
-      - name: Run ZAP baseline scan
-        run: |
-          zap-baseline.py -t https://grahambaggett.com -r report_html.html -a || echo 0
-      - name: Upload ZAP report
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-        with:
-            name: DAST_Report.html
-            path: ./report_html.html
+##############   USE DOCKER TO TAG AND PUSH INSTEAD OF FN ############################################
+#       - name: Build Function
+#         run: |
+#           cd functions/website-display
+#           fn build --verbose
+#       - name: Tag Container
+#         run: |
+#           image=$(docker images | grep func | awk -F ' ' '{print $3}') ;
+#           docker tag $image ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
+#       - name: Push Container into Registry
+#         run: docker push ${{ secrets.OCIR_DOCKER_REPOSITORY }}/${{ secrets.OCI_CLI_NAMESPACE }}/${{ secrets.OCIR_REPO_NAME }}/${{ secrets.WEBSITE_FUNCTION_NAME }}:0.0.1
+
+
+##############  ALTERNATE DOCKER LOGIN OPTION #########################################################
+#       - name: Login to OCIR
+#         env:
+#           OCIR_DOCKER_REPOSITORY: ${{ secrets.OCIR_DOCKER_REPOSITORY }}
+#           OCI_CLI_USERNAME: ${{ secrets.OCI_CLI_USERNAME }}
+#         run: echo '${{secrets.OCI_CLI_AUTH_TOKEN}}' |  docker login $OCIR_DOCKER_REPOSITORY --username "$OCI_CLI_NAMESPACE/$OCI_CLI_USERNAME" --password-stdin
+
+
+############## UPDATE BUCKET FILES ####################################################################
+#       - name: Change file timestamps to last modification date
+#         run: |
+#           git fetch --unshallow
+#           for f in $(git ls-files) ; do touch --date=@$(git log -1 --date=unix --format='%cd' "$f") "$f"; done
+#       - name: Copy files to the website bucket with the OCI CLI
+#         run: |
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.html' --content-type='text/html'
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.css' --content-type='text/css'
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.js' --content-type='text/javascript'
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.png' --content-type='image/png'
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.ico' --content-type='image/vnd.microsoft.icon'
+#            oci os object sync -bn gb-cloud-resume --src-dir . --include='*.webmanifest' --content-type='application/manifest+json'
+
+
+############### MISCALLANEOUS ##########################################################################
+#       - name: Get Configuration Source Provider Information
+#         run: oci resource-manager configuration-source-provider get --configuration-source-provider-id ${{secrets.OCI_CLI_FRONT_END_CONFIGURATION_SOURCE_PROVIDER_OCID}}
+#        - name: Check OCI compartments
+#        run: oci iam compartment list
+
+
+
+#   dast-scan: #performs Dynamic Application Security Testing against the target site
+#     runs-on: ubuntu-latest
+#     needs: update-infra-and-sync-site
+#     container:
+#       image: owasp/zap2docker-stable
+#       options: --user root -v ${{ github.workspace }}:/zap/wrk/:rw
+#     steps:
+#       - name: Harden Runner
+#         uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
+#         with:
+#           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+#       - name: Run ZAP baseline scan
+#         run: |
+#           zap-baseline.py -t https://grahambaggett.com -r report_html.html -a || echo 0
+#       - name: Upload ZAP report
+#         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+#         with:
+#             name: DAST_Report.html
+#             path: ./report_html.html

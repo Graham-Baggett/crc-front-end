@@ -1,34 +1,41 @@
-# Get data for the pre-purchased domain.
-data "aws_route53_zone" "domain" {
-  name = var.domain_name
+resource "oci_dns_zone" "hosted_zone" {
+    #Required
+    compartment_id = var.compartment_ocid
+    name = var.zone_name
+    zone_type = var.zone_type
 }
 
-locals {
-  record_types = toset(["A", "AAAA"])
-}
+# resource "oci_dns_rrset" "zone_rrset" {
+#     #Required
+#     domain = var.rrset_domain
+#     rtype = var.rrset_a_rtype
+#     zone_name_or_id = oci_dns_zone.hosted_zone.id
+    
+#     items {
+#         #Required
+#         domain = var.rrset_domain
+#         rdata = var.rrset_items_rdata
+#         rtype = var.rrset_a_rtype
+#         ttl = var.rrset_items_ttl
+#     }
+# }
 
-resource "aws_route53_record" "bare_record" {
-  zone_id  = data.aws_route53_zone.domain.zone_id
-  name     = var.domain_name
-  for_each = local.record_types
-  type     = each.value
+resource "oci_waas_http_redirect" "custom_domain_http_redirect" {
+    #Required
+    compartment_id = var.compartment_ocid
+    domain = var.domain_name
+    target {
+        #Required
+        host = var.http_redirect_target_host
+        path = var.http_redirect_target_path
+        protocol = var.http_redirect_target_protocol
+        query = var.http_redirect_target_query
 
-  alias {
-    name                   = aws_cloudfront_distribution.web_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.web_distribution.hosted_zone_id
-    evaluate_target_health = true
-  }
-}
+        #Optional
+        port = var.http_redirect_target_port
+    }
 
-resource "aws_route53_record" "www_record" {
-  zone_id  = data.aws_route53_zone.domain.zone_id
-  name     = "www.${var.domain_name}"
-  for_each = local.record_types
-  type     = each.value
-
-  alias {
-    name                   = aws_cloudfront_distribution.web_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.web_distribution.hosted_zone_id
-    evaluate_target_health = true
-  }
+    #Optional
+    display_name = var.http_redirect_display_name
+    response_code = var.http_redirect_response_code
 }
