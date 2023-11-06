@@ -46,8 +46,8 @@ jobs:
 #           echo "tenancy=$OCI_CLI_TENANCY" >> ~/.oci/config
 #           echo "key_file=~/.oci/key.pem" >> ~/.oci/config
 #           echo "$OCI_CLI_KEY_CONTENT" >> ~/.oci/key.pem
-      - name:  Harden Runner
-        uses: step-security/harden-runner@6b3083af2869dc3314a0257a42f4af696cc79ba3 # v2.3.1
+      - name: Harden Runner
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
         with:
           disable-sudo: true
           egress-policy: block
@@ -155,6 +155,7 @@ jobs:
           
 #       - name: Push front-end files
 #         uses: appleboy/scp-action@master
+
 #         with:
 #           host: ${{ env.INSTANCE_IP_ADDRESS }}
 #           username: opc
@@ -162,7 +163,6 @@ jobs:
 #           source: "css/*.css"
 #           target: "/home/opc/css"
 #           strip_components: 1
-
 
 ###############     MANAGE OCI WEBSITE DISPLAY FUNCTION     ######################################
 #       - name: Login to OCIR
